@@ -1,12 +1,3 @@
-# %% [markdown]
-# # The next two cells define functions for extracting the OCR within each predicted box.
-# 
-# 1. The first cell defines the function for returning the proper OCR for a specific page.
-# 2. The second cell defines the function for iterating over the JSON files containing the predictions.
-
-# %%
-# import xml.etree.cElementTree as ET
-# etree
 from lxml import etree as ET
 from xml.etree.ElementTree import ElementTree
 import json
@@ -19,7 +10,6 @@ HEIGHT_TOLERANCE = 0.000
 # given a file path and a list of bounding boxes, this function traverses the associated XML
 # and returns the OCR within each bounding box
 def retrieve_ocr_for_file(xml_filepath, true_img_filepath, page_width_pix, page_height_pix, bounding_boxes, predicted_classes):
-
     # creates empty nested list fo storing OCR in each box
     ocr = [ [] for i in range(len(bounding_boxes)) ]
 
@@ -110,13 +100,10 @@ def retrieve_ocr_for_file(xml_filepath, true_img_filepath, page_width_pix, page_
 
                                     # appends text content to list
                                     ocr[i].append(string.attrib["CONTENT"])
-
     return ocr
 
 
-# %%
 def retrieve_ocr(packet):
-
     # grab contents of packet, CD into correct directory
     dir_name = packet[1]
     os.chdir(packet[0] + dir_name)
