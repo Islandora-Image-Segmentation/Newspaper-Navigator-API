@@ -1,9 +1,6 @@
 # Python Style Guide
 
-## Python Style Rules 
-
-Let's try to follow this style guide inspired by [Google's Python Style Guide](http://google.github.io/styleguide/pyguide.html), in addition to the regular PEP8.
-
+Let's try to follow this style guide inspired by [Google's Python Style Guide](http://google.github.io/styleguide/pyguide.html), in addition to the regular PEP8, whenever possible. Keep this in mind when writing or reviewing code.
 
 **Semicolons**
 
