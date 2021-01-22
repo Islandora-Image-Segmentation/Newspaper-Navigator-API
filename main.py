@@ -1,34 +1,19 @@
-# %%
-# import some common libraries
-import cv2
-import random
+import os
 import json
-import numpy as np
-import matplotlib.pyplot as plt
-import matplotlib.patches as patches
-
-# import deep learning imports
-import detectron2
-import torch
-from detectron2.config import get_cfg
-from detectron2.data import DatasetCatalog, MetadataCatalog
-from detectron2.data.datasets import register_coco_instances
-from detectron2.engine import DefaultTrainer
-from detectron2.engine import DefaultPredictor
-from detectron2.evaluation import COCOEvaluator
-from detectron2.utils.visualizer import Visualizer
-from detectron2.utils.visualizer import ColorMode
-from detectron2.utils.logger import setup_logger
-from detectron2.modeling import build_model
-from detectron2.checkpoint import DetectionCheckpointer
-
-
-from multiprocessing import Pool, get_context, Process, set_start_method
-from collections import ChainMap
+import glob
+import collections
 import shutil
-import time
+from multiprocessing import Pool, get_context
+from collections import ChainMap
+
+import boto3
+import torch
+
 import embedding
 import ocr
+from utils import retrieve_files, upload_files, files_exist, chunk, crop
+from inference import generate_predictions
+
 
 # need main for setting multiprocessing start method to spawn
 if __name__ == '__main__':
