@@ -1,6 +1,7 @@
 # Custom
 model_final.pth
 faster_rcnn_R_50_FPN_3x.yaml
+resources/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
