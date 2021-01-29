@@ -11,66 +11,9 @@ from PIL import Image
 
 from config import OUTPUT_SAVE_DIR
 
-def crop(packet):
-  OUTPUT_SAVE_DIR = packet[0]
-  S3_SAVE_DIR = packet[1]
-  dir_name = packet[2]
-  json_filepaths = packet[3]
-
-  os.chdir(OUTPUT_SAVE_DIR + dir_name)
-
-  for json_filepath in json_filepaths:
-
-    # we load the JSON
-    with open(json_filepath) as f:
-      predictions = json.load(f)
-
-    # load in boxes
-    boxes = predictions['boxes']
-    scores = predictions['scores']
-    classes = predictions['pred_classes']
-
-    # grab filepath of image
-    jpg_filepath = S3_SAVE_DIR + dir_name + json_filepath.replace('.json', '.jpg')
-
-    # open image
-    im = Image.open(jpg_filepath)
-
-    # empty list for storing embeddings
-    img_embeddings = []
-
-    # empty list or storing filepaths of extracted visual content
-    content_filepaths = []
-
-    # iterate through boxes, crop, and send to embedding
-    for i in range(0, len(boxes)):
-      box = boxes[i]
-      pred_class = classes[i]
-      score = scores[i]
-
-      # if it's a headline or the confidence score is less than 0.5, we skip the cropping
-      if pred_class == 5:
-        img_embeddings.append([])
-        content_filepaths.append([])
-        continue
-
-      # crop image according to box (converted from normalized coordinates to image coordinates)
-      cropped = im.crop((box[0] * im.width, box[1] * im.height, box[2] * im.width, box[3] * im.height)).convert('RGB')
-      # save cropped image to output directory
-      cropped_filepath = json_filepath.replace(".json", "_" + str(i).zfill(3) + "_" + str(pred_class) + "_" + str(
-        int(math.floor(100 * score))).zfill(2) + ".jpg")
-      cropped.save(cropped_filepath)
-      new_filepath = dir_name + "data/" + cropped_filepath.split("data_")[1].replace(dir_name, '').replace('_', '/')
-      new_filepath = new_filepath[:new_filepath.rfind("/")] + "_" + new_filepath[new_filepath.rfind("/") + 1:]
-      new_filepath = new_filepath[:new_filepath.rfind("/")] + "_" + new_filepath[new_filepath.rfind("/") + 1:]
-      content_filepaths.append(new_filepath)
-
-    # add filepaths of extracted visual content to output
-    predictions['visual_content_filepaths'] = content_filepaths
-
-    # we save the updated JSON
-    with open(json_filepath, 'w') as f:
-      json.dump(predictions, f)
+def crop(image: Image.Image, box):
+  # Use built in crop function for PIL Image
+  return image.crop(box)
 
 
 def chunk(file_list, n_chunks):
