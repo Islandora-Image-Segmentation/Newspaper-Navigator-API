@@ -12,8 +12,10 @@ from PIL import Image
 from config import OUTPUT_SAVE_DIR
 
 def crop(image: Image.Image, box):
-  # Use built in crop function for PIL Image
-  return image.crop(box)
+  # Use built in crop function for PIL Image. Box co-ordinates converted to image co-ordinates
+  cropped = image.crop((box[0] * image.width, box[1] * image.height, box[2] * image.width, box[3] * image.height)).convert('RGB')
+
+  return cropped
 
 
 def chunk(file_list, n_chunks):
