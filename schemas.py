@@ -3,9 +3,9 @@ from PIL import Image
 from typing import List
 from enum import Enum
 
-# Bounding box coordinates
 
-class Box(BaseModel):
+class BoundingBox(BaseModel):
+    """ Data wrapper for bounding box coordinates. """
     upper_left_x: int
     upper_left_y: int
     lower_right_x: int
