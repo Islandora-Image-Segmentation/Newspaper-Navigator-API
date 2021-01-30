@@ -6,3 +6,4 @@ opencv-python==4.5.1.48
 numpy==1.19.5
 matplotlib==3.3.3
 img2vec-pytorch==0.2.5
+pytesseract==0.3.7
