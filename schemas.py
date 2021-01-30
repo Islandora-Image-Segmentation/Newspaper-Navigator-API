@@ -6,10 +6,24 @@ from enum import Enum
 # Bounding box coordinates
 
 class Box(BaseModel):
-    lower_left: int
-    upper_left: int
-    upper_right: int
-    lower_right: int
+    upper_left_x: int
+    upper_left_y: int
+    lower_right_x: int
+    lower_right_y: int
+
+    def __getitem__(self, i):
+        if i < 0 or i > 3:
+            raise Exception(f"Box does not have index {i}")
+        if i == 0:
+            return self.upper_left_x
+        if i == 1:
+            return self.upper_left_y
+        if i == 2:
+            return self.lower_right_x
+        if i == 3:
+            return self.lower_right_y
+
+
 
 # Object type enum
 
