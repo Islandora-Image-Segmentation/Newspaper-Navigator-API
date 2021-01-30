@@ -22,12 +22,6 @@ class Categories(Enum):
     headline = "headline"
     ad = "ad"
 
-# Holding class for object type data
-
-class ImageCategories(BaseModel):
-    categories: Categories
-    category_count: int
-
 # Segments extracted from article image
 
 class ExtractedSegment(BaseModel):
@@ -35,13 +29,12 @@ class ExtractedSegment(BaseModel):
     text: str
     box: Box
     embeddings: List[int]
-    category: str
+    category: Categories
     confidence: float
+    parentID: str
 
 # Original newspaper extract
 
 class Article(BaseModel):
     image: Image.Image
     metadata: dict
-    embeddings: List[int]
-    extractedSegments: List[ExtractedSegment]
