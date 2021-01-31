@@ -11,3 +11,4 @@ An API wrapper around the Newspaper Navigator app.
  5. Install [detectron2.](https://github.com/facebookresearch/detectron2/blob/master/INSTALL.md)
  6. Install the required Python packages from requirements.txt  
 	 - You can run `pip install -r requirements.txt` to install all of them.
+ 7. Windows platform users may not have pytesseract in their PATH. If so add this line to your code `pytesseract.pytesseract.tesseract_cmd = r'<full_path_to_your_tesseract_executable>'`. For example, `tesseract_cmd = r'C:\Program Files (x86)\Tesseract-OCR\tesseract'`
