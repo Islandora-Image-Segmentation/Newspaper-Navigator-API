@@ -35,20 +35,21 @@ class Categories(Enum):
     map = "map"
     headline = "headline"
     ad = "ad"
+    
+# Original newspaper extract
+
+
+class Article(BaseModel):
+    image: Image.Image
+    metadata: dict
 
 # Segments extracted from article image
 
 class ExtractedSegment(BaseModel):
     image: Image.Image
     text: str
-    box: Box
+    box: BoundingBox
     embeddings: List[int]
     category: Categories
     confidence: float
-    parentID: str
-
-# Original newspaper extract
-
-class Article(BaseModel):
-    image: Image.Image
-    metadata: dict
+    parent_ref: Article
