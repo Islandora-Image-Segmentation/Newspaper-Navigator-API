@@ -5,6 +5,7 @@ import torch
 import numpy as np
 
 from model import get_model
+from schemas import ModelOutput
 
 
 def image_to_model_input(image: PIL.Image.Image) -> Dict[str, torch.Tensor]:
@@ -29,3 +30,7 @@ def predict(image: PIL.Image.Image):
         for box in bounding_boxes:
             normalized_box = (box[0]/float(width), box[1]/float(height), box[2]/float(width), box[3]/float(height))
             normalized_bounding_boxes.append(normalized_box)
+
+        return ModelOutput(bounding_boxes=bounding_boxes,
+                           confidences=confidences,
+                           classes=classes)
