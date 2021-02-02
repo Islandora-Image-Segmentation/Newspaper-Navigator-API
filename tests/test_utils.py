@@ -9,7 +9,7 @@ class TestCrop:
   """Test function using first image"""
   def test_crop_one(self):
     """Load first Image"""
-    img = Image.open("tests/test_assets/test_image_one.jpg")
+    img = Image.open("tests/test_assets/test_image_one.png")
 
     """Extract width and height of original image"""
     initial_width, initial_height = img.size
@@ -31,7 +31,7 @@ class TestCrop:
 
   def test_crop_two(self):
       """Load second Image"""
-      img = Image.open("tests/test_assets/test_image_two.jpg")
+      img = Image.open("tests/test_assets/test_image_two.png")
 
       """Extract width and height of original image"""
       initial_width, initial_height = img.size
@@ -52,10 +52,25 @@ class TestCrop:
   class TestOCRFunction:
     def test_ocr_one(self):
       """Load first Image"""
-      img = Image.open("tests/test_assets/test_image_one.jpg")
+      img = Image.open("tests/test_assets/test_image_one.png")
 
       """Call retrieve_ocr from ocr.py"""
       text = retrieve_ocr(img)
 
-      """text from first image should be 'great!'"""
-      assert text is "great!"
+      """text from first image should contain the below portions of text"""
+      assert "This is a lot of 12 point text" in text
+      assert "The quick brown dog" in text
+      assert "over the lazy fox" in text
+
+    def test_ocr_two(self):
+      """Load first Image"""
+      img = Image.open("tests/test_assets/test_image_two.png")
+
+      """Call retrieve_ocr from ocr.py"""
+      text = retrieve_ocr(img)
+
+      """text from first image should contain the below portions of text"""
+      assert "to test" in text
+      assert "Tesseract OCR" in text
+
+
