@@ -11,6 +11,8 @@ pip install git+https://github.com/facebookresearch/fvcore
 pip install -U 'git+https://github.com/facebookresearch/fvcore.git' 'git+https://github.com/cocodataset/cocoapi.git#subdirectory=PythonAPI'
 pip install pydantic
 pip install pytesseract
+brew install tesseract
+pip install -U pytest
 git clone https://github.com/facebookresearch/detectron2
 cd detectron2
 python setup.py build develop
