@@ -40,7 +40,6 @@ class Categories(Enum):
 class Article(BaseModel):
     class Config:
         arbitrary_types_allowed = True
-        
     image: Image.Image
     metadata: dict
 
@@ -49,7 +48,6 @@ class Article(BaseModel):
 class ExtractedSegment(BaseModel):
     class Config:
         arbitrary_types_allowed = True
-    
     image: Image.Image
     text: str
     box: BoundingBox
