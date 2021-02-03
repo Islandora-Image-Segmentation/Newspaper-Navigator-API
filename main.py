@@ -2,9 +2,12 @@ import uvicorn
 import argparse
 from fastapi import FastAPI
 
+import utils
+import inference
 from schemas import SegmentationRequest
 from schemas import SegmentationResponse
 from schemas import Article
+
 
 
 parser = argparse.ArgumentParser()
@@ -20,8 +23,10 @@ app = FastAPI()
 
 @app.post("/api/segment_article")
 async def segment_article(request: SegmentationRequest) -> SegmentationResponse:
-    pass
-
+    image = utils.base64_to_image(request.image_base64)
+    standardized_image = utils.standardize_image(image)
+    return inference.predict(standardized_image)
+  
 
 uvicorn.run(app, 
             port=args.port, 
