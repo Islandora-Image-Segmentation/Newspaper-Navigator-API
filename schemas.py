@@ -4,6 +4,14 @@ from typing import List
 from enum import Enum
 
 
+class SegmentationRequest(BaseModel):
+    image_base64: str
+
+
+class SegmentationResponse(BaseModel):
+    pass
+
+
 class BoundingBox(BaseModel):
     """ Data wrapper for bounding box coordinates. """
     upper_left_x: int
@@ -40,12 +48,16 @@ class Categories(Enum):
 
 
 class Article(BaseModel):
+    class Config:
+        arbitrary_types_allowed = True
     image: Image.Image
     metadata: dict
 
 # Segments extracted from article image
 
 class ExtractedSegment(BaseModel):
+    class Config:
+        arbitrary_types_allowed = True
     image: Image.Image
     text: str
     box: BoundingBox
