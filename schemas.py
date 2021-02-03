@@ -23,8 +23,6 @@ class BoundingBox(BaseModel):
         if i == 3:
             return self.lower_right_y
 
-
-
 # Object type enum
 
 class Categories(Enum):
@@ -53,3 +51,9 @@ class ExtractedSegment(BaseModel):
     category: Categories
     confidence: float
     parent_ref: Article
+
+
+class ModelOutput(BaseModel):
+    bounding_boxes: List[BoundingBox]
+    confidences: float
+    classes: Categories
