@@ -1,76 +1,52 @@
 from PIL import Image
 from utils import crop
-from ocr import retrieve_ocr
+import os
 
-"""Test class for crop function in utils"""
+CURRENT_SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 
-class TestCrop:
+# Absolute path to test_assets
+TEST_ASSETS = os.path.join(CURRENT_SCRIPT_DIR, "test_assets")
 
-  """Test function using first image"""
-  def test_crop_one(self):
-    """Load first Image"""
-    img = Image.open("tests/test_assets/test_image_one.png")
+"""First crop function test"""
 
-    """Extract width and height of original image"""
-    initial_width, initial_height = img.size
+def test_crop_one():
+  #Load first Image
+  img = Image.open(os.path.join(TEST_ASSETS, "test_image_one.png"))
 
-    """Call crop function from utils"""
-    img_cropped = crop(img, [0.5,0.5,1,1])
+  #Extract width and height of original image
+  initial_width, initial_height = img.size
 
-    """Extract width and height of cropped image"""
-    final_width, final_height = img_cropped.size
+  #Call crop function from utils
+  img_cropped = crop(img, [0.5, 0.5, 1, 1])
 
-    """Check if crop function returns a null object"""
-    assert img_cropped is not None
+  #Extract width and height of cropped image
+  final_width, final_height = img_cropped.size
 
-    """Check if cropped image has reduced in size"""
-    assert (initial_width >= final_width and initial_height > final_height) \
-           or (initial_width > final_width and initial_height >= final_height)
+  #Check if crop function returns a null object
+  assert img_cropped is not None
 
-    """Test function using second image"""
+  #Check if cropped image has reduced in size
+  assert (initial_width >= final_width and initial_height > final_height) \
+         or (initial_width > final_width and initial_height >= final_height)
 
-  def test_crop_two(self):
-      """Load second Image"""
-      img = Image.open("tests/test_assets/test_image_two.png")
+"""Second crop function test"""
 
-      """Extract width and height of original image"""
-      initial_width, initial_height = img.size
+def test_crop_two():
+  #Load second Image
+  img = Image.open(os.path.join(TEST_ASSETS, "test_image_two.png"))
 
-      """Call crop function from utils"""
-      img_cropped = crop(img, [0.5, 0.5, 1, 1])
+  #Extract width and height of original image
+  initial_width, initial_height = img.size
 
-      """Extract width and height of cropped image"""
-      final_width, final_height = img_cropped.size
+  #Call crop function from utils
+  img_cropped = crop(img, [0.5, 0.5, 1, 1])
 
-      """Check if crop function returns a null object"""
-      assert img_cropped is not None
+  #Extract width and height of cropped image
+  final_width, final_height = img_cropped.size
 
-      """Check if cropped image has reduced in size"""
-      assert (initial_width >= final_width and initial_height > final_height) \
-             or (initial_width > final_width and initial_height >= final_height)
+  #Check if crop function returns a null object
+  assert img_cropped is not None
 
-  class TestOCRFunction:
-    def test_ocr_one(self):
-      """Load first Image"""
-      img = Image.open("tests/test_assets/test_image_one.png")
-
-      """Call retrieve_ocr from ocr.py"""
-      text = retrieve_ocr(img)
-
-      """text from first image should contain the below portions of text"""
-      assert "This is a lot of 12 point text" in text
-      assert "The quick brown dog" in text
-      assert "over the lazy fox" in text
-
-    def test_ocr_two(self):
-      """Load first Image"""
-      img = Image.open("tests/test_assets/test_image_two.png")
-
-      """Call retrieve_ocr from ocr.py"""
-      text = retrieve_ocr(img)
-
-      """text from first image should contain the below portions of text"""
-      assert "to test" in text
-      assert "Tesseract OCR" in text
-
-
+  #Check if cropped image has reduced in size
+  assert (initial_width >= final_width and initial_height > final_height) \
+         or (initial_width > final_width and initial_height >= final_height)
