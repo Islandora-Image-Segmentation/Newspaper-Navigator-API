@@ -6,10 +6,11 @@ import numpy as np
 
 from model import get_inference_model
 from schemas import ModelOutput
-
+import utils
 
 def image_to_model_input(image: PIL.Image.Image) -> Dict[str, torch.Tensor]:
-    image_array = np.asarray(image)
+    standardized_image = utils.standardize_image(image)
+    image_array = np.asarray(standardized_image)
     image_array = np.transpose(image_array, (2, 0, 1))
     return {"image": torch.from_numpy(image_array.copy())}
 
