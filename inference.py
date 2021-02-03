@@ -4,7 +4,7 @@ import PIL
 import torch
 import numpy as np
 
-from model import get_model
+from model import get_inference_model
 from schemas import ModelOutput
 
 
@@ -15,8 +15,8 @@ def image_to_model_input(image: PIL.Image.Image) -> Dict[str, torch.Tensor]:
 
 
 def predict(image: PIL.Image.Image):
-    width, height = image.size()
-    model = get_model()
+    width, height = image.size
+    model = get_inference_model()
     model.eval()
     with torch.no_grad():
         model_input = image_to_model_input(image)
