@@ -17,4 +17,4 @@ def image_to_base64(image: Image.Image) -> str:
 
 def base64_to_image(base64_string: str) -> Image.Image:
   image_bytes = base64.b64decode(base64_string)
-  return Image.open(io.BytesiIO(image_bytes))
+  return Image.open(io.BytesIO(image_bytes))
