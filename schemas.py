@@ -23,8 +23,6 @@ class BoundingBox(BaseModel):
         if i == 3:
             return self.lower_right_y
 
-
-
 # Object type enum
 
 class Categories(Enum):
@@ -40,12 +38,16 @@ class Categories(Enum):
 
 
 class Article(BaseModel):
+    class Config:
+        arbitrary_types_allowed = True
     image: Image.Image
     metadata: dict
 
 # Segments extracted from article image
 
 class ExtractedSegment(BaseModel):
+    class Config:
+        arbitrary_types_allowed = True
     image: Image.Image
     text: str
     box: BoundingBox
@@ -53,3 +55,9 @@ class ExtractedSegment(BaseModel):
     category: Categories
     confidence: float
     parent_ref: Article
+
+
+class ModelOutput(BaseModel):
+    bounding_boxes: List[BoundingBox]
+    confidences: float
+    classes: Categories
