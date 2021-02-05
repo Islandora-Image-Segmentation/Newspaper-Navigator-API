@@ -5,8 +5,18 @@ import torch
 import numpy as np
 
 from model import get_inference_model
-from schemas import ModelOutput
+from schemas import ModelOutput, BoundingBox
 import utils
+
+
+CATEGORIES = {1:"Photograph",
+              2:"Illustration",
+              3:"Map",
+              4:"Comics/Cartoons",
+              5:"Editorial Cartoon",
+              6:"Headline",
+              7:"Advertisement"}
+
 
 def image_to_model_input(image: PIL.Image.Image) -> Dict[str, torch.Tensor]:
     standardized_image = utils.standardize_image(image)
@@ -21,17 +31,20 @@ def predict(image: PIL.Image.Image):
     model.eval()
     with torch.no_grad():
         model_input = image_to_model_input(image)
-        model_output = model([model_input])
-
+        model_output = model([model_input])[0]
+        
         bounding_boxes = model_output["instances"].get_fields()["pred_boxes"].to("cpu").tensor.tolist()
         confidences = model_output["instances"].get_fields()["scores"].to("cpu").tolist()
         classes = model_output["instances"].get_fields()["pred_classes"].to("cpu").tolist()
-        
+        classes = [CATEGORIES[num] for num in classes]
+
         normalized_bounding_boxes = []
         for box in bounding_boxes:
             normalized_box = (box[0]/float(width), box[1]/float(height), box[2]/float(width), box[3]/float(height))
-            normalized_bounding_boxes.append(normalized_box)
-
-        return ModelOutput(bounding_boxes=bounding_boxes,
+            normalized_bounding_boxes.append(BoundingBox(upper_left_x=normalized_box[0],
+                                                         upper_left_y=normalized_box[1], 
+                                                         lower_right_x=normalized_box[2],
+                                                         lower_right_y=normalized_box[3]))
+        return ModelOutput(bounding_boxes=normalized_bounding_boxes,
                            confidences=confidences,
                            classes=classes)
