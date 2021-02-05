@@ -38,16 +38,15 @@ async def segment_article(request: schemas.SegmentationRequest) -> schemas.Segme
                                     classification=model_output.classes[i],
                                     confidence=model_output.confidences[i])
             segments.append(segment)
-
         return schemas.SegmentationResponse(status_code=0,
                                     error_message="",
                                     segment_count=len(segments),
                                     segments=segments)
     except Exception as e:
         return schemas.SegmentationResponse(status_code=-1,
-                                    error_message=f"Failed to process request due to {repr(e)}",
-                                    segment_count=None,
-                                    segments=None)     
+                                    error_message=f"Failed to process request due to {str(e)}",
+                                    segment_count=0,
+                                    segments=[])     
 
 uvicorn.run(app, 
             port=args.port, 
