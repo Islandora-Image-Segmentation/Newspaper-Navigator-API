@@ -4,8 +4,6 @@ from typing import List
 from enum import Enum
 
 
-
-
 class BoundingBox(BaseModel):
     """ Data wrapper for bounding box coordinates. """
     upper_left_x: int
@@ -26,9 +24,6 @@ class BoundingBox(BaseModel):
             return self.lower_right_y
 
 
-
-# Object type enum
-
 class Categories(Enum):
     illustration = 'illustration'
     photograph = "photograph"
@@ -38,8 +33,6 @@ class Categories(Enum):
     headline = "headline"
     ad = "ad"
     
-# Original newspaper extract
-
 
 class Article(BaseModel):
     class Config:
@@ -47,7 +40,6 @@ class Article(BaseModel):
     image: Image.Image
     metadata: dict
 
-# Segments extracted from article image
 
 class ExtractedSegment(BaseModel):
     class Config:
@@ -63,8 +55,7 @@ class ExtractedSegment(BaseModel):
 class ModelOutput(BaseModel):
     bounding_boxes: List[BoundingBox]
     confidences: List[float]
-    classes: List[Categories]
-
+    classes: List[str]
 
 
 class SegmentationRequest(BaseModel):
@@ -76,3 +67,4 @@ class SegmentationResponse(BaseModel):
     error_message: str
     segment_count: int
     segments: List[ExtractedSegment]
+    

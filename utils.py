@@ -7,7 +7,7 @@ import config
 
 
 def crop(image: Image.Image, box) -> Image.Image:
-  """Crop the image according to box, which should contains normalized coordinates."""
+  """Crop the image according to box, which should contain normalized coordinates."""
   return image.crop((box[0] * image.width, box[1] * image.height, box[2] * image.width, box[3] * image.height))
 
 
