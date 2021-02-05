@@ -1,3 +1,5 @@
+import pytest
+
 from ocr import retrieve_ocr, retrieve_hocr
 from PIL import Image
 import os
@@ -7,59 +9,36 @@ CURRENT_SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 # Absolute path to test_assets
 TEST_ASSETS = os.path.join(CURRENT_SCRIPT_DIR, "test_assets")
 
-"""First OCR function test"""
 
-def test_ocr_one():
-  #Load first Image
-  img = Image.open(os.path.join(TEST_ASSETS, "test_image_one.png"))
+@pytest.mark.parametrize("image_file, expected", [
+    ("test_image_one.png", ["This is a lot of 12 point text", "The quick brown dog", "over the lazy fox"]),
+    ("test_image_two.png", ["to test", "Tesseract OCR"]),
+    ("test_advertisement_one.png", ["PRESCRIPTION", "calf"]),
+])
+def test_ocr(image_file, expected):
+    # Load first Image
+    img = Image.open(os.path.join(TEST_ASSETS, image_file))
 
-  #Call retrieve_ocr from ocr.py
-  text = retrieve_ocr(img)
+    # Call retrieve_ocr from ocr.py
+    text = retrieve_ocr(img)
 
-  #text from first image should contain the below portions of text
-  assert "This is a lot of 12 point text" in text
-  assert "The quick brown dog" in text
-  assert "over the lazy fox" in text
-
-"""Second OCR function test"""
-
-def test_ocr_two():
-  #Load first Image
-  img = Image.open(os.path.join(TEST_ASSETS, "test_image_two.png"))
-
-  #Call retrieve_ocr from ocr.py
-  text = retrieve_ocr(img)
-
-  #text from first image should contain the below portions of text
-  assert "to test" in text
-  assert "Tesseract OCR" in text
-
-"""First HOCR function test"""
+    # text from first image should contain the below portions of text
+    for exp in expected:
+        assert exp in text
 
 
-def test_hocr_one():
-  #Load first Image
-  img = Image.open(os.path.join(TEST_ASSETS, "test_image_one.png"))
+@pytest.mark.parametrize("image_file, expected", [
+    ("test_image_one.png", ["<!DOCTYPE html", "This", "brown", "fox"]),
+    ("test_image_two.png", ["<!DOCTYPE html", "test", "Tesseract"]),
+    ("test_advertisement_one.png", ["<!DOCTYPE html", "PRESCRIPTION", "calf"]),
+])
+def test_hocr(image_file, expected):
+    # Load first Image
+    img = Image.open(os.path.join(TEST_ASSETS, image_file))
 
-  #Call retrieve_hocr from ocr.py
-  text = retrieve_hocr(img)
-  decoded_text = text.decode("utf-8")
+    # Call retrieve_ocr from ocr.py
+    text = retrieve_hocr(img).decode('utf-8')
 
-  #text from first image should contain the below portions of text
-  assert "This" in decoded_text
-  assert "brown" in decoded_text
-  assert "fox" in decoded_text
-
-"""Second HOCR function test"""
-
-def test_hocr_two():
-  #Load first Image
-  img = Image.open(os.path.join(TEST_ASSETS, "test_image_two.png"))
-
-  #Call retrieve_hocr from ocr.py
-  text = retrieve_hocr(img)
-  decoded_text = text.decode("utf-8")
-
-  #text from first image should contain the below portions of text
-  assert "test" in decoded_text
-  assert "Tesseract" in decoded_text
+    # text from first image should contain the below portions of text
+    for exp in expected:
+        assert exp in text
