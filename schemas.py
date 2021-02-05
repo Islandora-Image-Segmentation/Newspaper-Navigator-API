@@ -4,12 +4,6 @@ from typing import List
 from enum import Enum
 
 
-class SegmentationRequest(BaseModel):
-    image_base64: str
-
-
-class SegmentationResponse(BaseModel):
-    pass
 
 
 class BoundingBox(BaseModel):
@@ -58,10 +52,27 @@ class Article(BaseModel):
 class ExtractedSegment(BaseModel):
     class Config:
         arbitrary_types_allowed = True
-    image: Image.Image
-    text: str
-    box: BoundingBox
-    embeddings: List[int]
-    category: Categories
+    
+    ocr_text: str 
+    bounding_box: BoundingBox
+    embedding: List[float]
+    classification: Categories
     confidence: float
-    parent_ref: Article
+
+
+class ModelOutput(BaseModel):
+    bounding_boxes: List[BoundingBox]
+    confidences: List[float]
+    classes: List[Categories]
+
+
+
+class SegmentationRequest(BaseModel):
+    image_base64: str
+
+
+class SegmentationResponse(BaseModel):
+    status_code: int
+    error_message: str
+    segment_count: int
+    segments: List[ExtractedSegment]
