@@ -26,10 +26,9 @@ async def segment_article(request: schemas.SegmentationRequest) -> schemas.Segme
         image = utils.base64_to_image(request.image_base64)
         standardized_image = utils.standardize_image(image)
         model_output = inference.predict(standardized_image)
-        segment_images = [utils.crop(image, box) for box in model_output.bounding_boxes]
+        segment_images = [utils.crop(image, box).convert("RGB") for box in model_output.bounding_boxes]
         segment_ocr = [ocr.retrieve_ocr(image) for image in segment_images]
-        segment_embeddings = [embedding.generate_embeddings(image) for image in segment_images]
-        
+        segment_embeddings = [embedding.generate_embeddings(image).tolist() for image in segment_images]
         segments = []
         for i in range(len(model_output.bounding_boxes)):
             segment = schemas.ExtractedSegment(ocr_text=segment_ocr[i],
@@ -45,8 +44,8 @@ async def segment_article(request: schemas.SegmentationRequest) -> schemas.Segme
     except Exception as e:
         return schemas.SegmentationResponse(status_code=-1,
                                     error_message=f"Failed to process request due to {str(e)}",
-                                    segment_count=0,
-                                    segments=[])     
+                                    segment_count=None,
+                                    segments=None)     
 
 uvicorn.run(app, 
             port=args.port, 
