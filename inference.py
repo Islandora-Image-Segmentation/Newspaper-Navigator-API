@@ -9,13 +9,13 @@ from schemas import ModelOutput, BoundingBox
 import utils
 
 
-CATEGORIES = {1:"Photograph",
-              2:"Illustration",
-              3:"Map",
-              4:"Comics/Cartoons",
-              5:"Editorial Cartoon",
-              6:"Headline",
-              7:"Advertisement"}
+CATEGORIES = {0:"Photograph",
+              1:"Illustration",
+              2:"Map",
+              3:"Comics/Cartoons",
+              4:"Editorial Cartoon",
+              5:"Headline",
+              6:"Advertisement"}
 
 
 def image_to_model_input(image: PIL.Image.Image) -> Dict[str, torch.Tensor]:
