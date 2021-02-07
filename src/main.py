@@ -16,7 +16,7 @@ parser = argparse.ArgumentParser()
 parser.add_argument("--port", "-p", type=int, default=8000)
 parser.add_argument("--host", type=str, default="0.0.0.0")
 parser.add_argument("--log_level", "-l", type=str, default="info") # Possible options are: critical, error, warning, info, debug, trace
-parser.add_argument("--timeout", "-t", type=int, default=5) # Timeout in seconds
+parser.add_argument("--timeout", "-t", type=int, default=30) # Timeout in seconds
 args = parser.parse_args()
 
 
