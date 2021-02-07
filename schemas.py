@@ -1,15 +1,16 @@
 from pydantic import BaseModel
 from PIL import Image
 from typing import List
+from typing import Optional
 from enum import Enum
 
 
 class BoundingBox(BaseModel):
     """ Data wrapper for bounding box coordinates. """
-    upper_left_x: int
-    upper_left_y: int
-    lower_right_x: int
-    lower_right_y: int
+    upper_left_x: float
+    upper_left_y: float
+    lower_right_x: float
+    lower_right_y: float
 
     def __getitem__(self, i):
         if i < 0 or i > 3:
@@ -42,13 +43,10 @@ class Article(BaseModel):
 
 
 class ExtractedSegment(BaseModel):
-    class Config:
-        arbitrary_types_allowed = True
-    
     ocr_text: str 
     bounding_box: BoundingBox
     embedding: List[float]
-    classification: Categories
+    classification: str
     confidence: float
 
 
@@ -65,6 +63,6 @@ class SegmentationRequest(BaseModel):
 class SegmentationResponse(BaseModel):
     status_code: int
     error_message: str
-    segment_count: int
-    segments: List[ExtractedSegment]
+    segment_count: Optional[int]
+    segments: Optional[List[ExtractedSegment]]
     
