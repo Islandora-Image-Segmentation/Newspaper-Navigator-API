@@ -16,6 +16,8 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+    - name: Install tesseract
+      run: sudo apt-get install -y tesseract-ocr
     - name: Set up Python 3.7
       uses: actions/setup-python@v2
       with:
