@@ -26,3 +26,4 @@ An API wrapper around the Newspaper Navigator app.
  2.`--host`: What host to listen on (default `0.0.0.0`)
  3.`--log-level`/`-l`: Minimum log level to use (default `info`)
  4.`--timeout`/`-t`: Timeout keep alive in seconds (default `30`)
+
