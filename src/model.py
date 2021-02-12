@@ -1,13 +1,9 @@
-""" This module contains code for loading and fetching the pretrained 
-    PyTorch model weights from disk. """
-
 import os
 
 import detectron2
-from detectron2.config import get_cfg
 from detectron2 import model_zoo
+from detectron2.config import get_cfg
 from img2vec_pytorch import Img2Vec
-
 
 SCRIPT_DIRECTORY = os.path.dirname(os.path.abspath(__file__))
 RESOURCES_DIRECTORY = os.path.join(SCRIPT_DIRECTORY, "resources")
@@ -26,7 +22,7 @@ def get_inference_model():
 def get_embedding_model():
     global _embedding_model
     if _embedding_model is None:
-        _embedding_model = Img2Vec(cuda=False, model='resnet-18') #Smaller model runs faster on CPU
+        _embedding_model = Img2Vec(cuda=False, model='resnet-18')  # Smaller model runs faster on CPU
     return _embedding_model
 
 
@@ -38,7 +34,8 @@ def load_inference_model_from_disk():
         model.train(False)
         return model
     else:
-        raise Exception(f"Could not find the model weights at {INFERENCE_MODEL_WEIGHTS}. Please follow installation instructions to download the weights.")
+        raise Exception(
+            f"Could not find the model weights at {INFERENCE_MODEL_WEIGHTS}. Please follow installation instructions to download the weights.")
 
 
 def build_detectron_config():

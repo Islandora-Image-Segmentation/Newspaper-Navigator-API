@@ -1,8 +1,9 @@
+from enum import Enum
 from pydantic import BaseModel
-from PIL import Image
 from typing import List
 from typing import Optional
-from enum import Enum
+
+from PIL import Image
 
 
 class BoundingBox(BaseModel):
@@ -33,17 +34,18 @@ class Categories(Enum):
     map = "map"
     headline = "headline"
     ad = "ad"
-    
+
 
 class Article(BaseModel):
     class Config:
         arbitrary_types_allowed = True
+
     image: Image.Image
     metadata: dict
 
 
 class ExtractedSegment(BaseModel):
-    ocr_text: str 
+    ocr_text: str
     bounding_box: BoundingBox
     embedding: List[float]
     classification: str
@@ -59,12 +61,13 @@ class ModelOutput(BaseModel):
 class UrlSegmentationRequest(BaseModel):
     image_url: str
 
+
 class Base64SegmentationRequest(BaseModel):
     image_base64: str
+
 
 class SegmentationResponse(BaseModel):
     status_code: int
     error_message: str
     segment_count: Optional[int]
     segments: Optional[List[ExtractedSegment]]
-    
