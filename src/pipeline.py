@@ -1,6 +1,6 @@
 from typing import List
 
-import PIL
+from PIL import Image
 
 import config
 import embedding
@@ -10,7 +10,7 @@ import schemas
 import utils
 
 
-def segment_image(image: PIL.Image.Image) -> List[schemas.ExtractedSegment]:
+def segment_image(image: Image.Image) -> List[schemas.ExtractedSegment]:
     standardized_image = utils.standardize_image(image)
     model_output = inference.predict(standardized_image)
 

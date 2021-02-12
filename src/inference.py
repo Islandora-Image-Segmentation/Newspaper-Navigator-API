@@ -1,6 +1,6 @@
 from typing import Dict
 
-import PIL
+from PIL import Image
 import torch
 import numpy as np
 
@@ -17,13 +17,13 @@ CATEGORIES = {0: "Photograph",
               6: "Advertisement"}
 
 
-def image_to_model_input(image: PIL.Image.Image) -> Dict[str, torch.Tensor]:
+def image_to_model_input(image: Image.Image) -> Dict[str, torch.Tensor]:
     image_array = np.asarray(image)
     image_array = np.transpose(image_array, (2, 0, 1))
     return {"image": torch.from_numpy(image_array.copy())}
 
 
-def predict(image: PIL.Image.Image):
+def predict(image: Image.Image):
     width, height = image.size
     model = get_inference_model()
     model.eval()
