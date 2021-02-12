@@ -56,9 +56,11 @@ class ModelOutput(BaseModel):
     classes: List[str]
 
 
-class SegmentationRequest(BaseModel):
-    image_base64: str
+class UrlSegmentationRequest(BaseModel):
+    image_url: str
 
+class Base64SegmentationRequest(BaseModel):
+    image_base64: str
 
 class SegmentationResponse(BaseModel):
     status_code: int
