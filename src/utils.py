@@ -43,7 +43,3 @@ def download_image(image_url: str) -> Image.Image:
         return Image.open(image_bytes)
     else:
         raise Exception(f"Received status code {response.status_code} when downloading file {image_url}.")
-
-
-image = download_image("https://avatars.githubusercontent.com/u/20927595?s=460&v=4")
-image.show()
