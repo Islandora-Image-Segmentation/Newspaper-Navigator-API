@@ -1,9 +1,12 @@
 import argparse
 import re
 import traceback
+import io
 
 import uvicorn
 from fastapi import FastAPI
+from fastapi import File
+from PIL import Image
 
 import config
 import pipeline
@@ -12,6 +15,22 @@ import utils
 
 
 app = FastAPI()
+
+
+@app.post("/api/segment_formdata")
+async def segment_formdata(image_file: bytes = File(...)) -> schemas.SegmentationResponse:
+    try:
+        image = Image.open(io.BytesIO(image_file))
+        segments = pipeline.segment_image(image)
+        return schemas.SegmentationResponse(status_code=0,
+                                            error_message="",
+                                            segment_count=len(segments),
+                                            segments=segments)
+    except Exception as e:
+        return schemas.SegmentationResponse(status_code=-1,
+                                            error_message=f"Failed to process request due to {traceback.format_exc()}",
+                                            segment_count=None,
+                                            segments=None)
 
 
 @app.post("/api/segment_url")
