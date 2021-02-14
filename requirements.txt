@@ -6,6 +6,5 @@ detectron2~=0.3
 pytesseract==0.3.7
 uvicorn==0.13.3
 fastapi==0.63.0
-numpy~=1.19.5
-
 pytest~=6.2.2
+numpy
