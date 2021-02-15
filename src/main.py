@@ -38,11 +38,13 @@ async def segment_article(request: schemas.SegmentationRequest) -> schemas.Segme
 
     segment_images = [utils.crop(image, box).convert("RGB") for box in model_output.bounding_boxes]
     segment_ocr = [ocr.retrieve_ocr(image) for image in segment_images]
+    segment_hocr = [ocr.retrieve_hocr(image) for image in segment_images]
     segment_embeddings = [embedding.generate_embeddings(image).tolist() for image in segment_images]
 
     segments = []
     for i in range(len(model_output.bounding_boxes)):
       segment = schemas.ExtractedSegment(ocr_text=segment_ocr[i],
+                                         hocr=segment_hocr[i],
                                          bounding_box=model_output.bounding_boxes[i],
                                          embedding=segment_embeddings[i],
                                          classification=model_output.classes[i],

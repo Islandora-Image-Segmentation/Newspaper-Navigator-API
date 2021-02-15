@@ -44,6 +44,7 @@ class Article(BaseModel):
 
 class ExtractedSegment(BaseModel):
     ocr_text: str 
+    hocr: str
     bounding_box: BoundingBox
     embedding: List[float]
     classification: str
