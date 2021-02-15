@@ -33,17 +33,18 @@ class Categories(Enum):
     map = "map"
     headline = "headline"
     ad = "ad"
-    
+
 
 class Article(BaseModel):
     class Config:
         arbitrary_types_allowed = True
+
     image: Image.Image
     metadata: dict
 
 
 class ExtractedSegment(BaseModel):
-    ocr_text: str 
+    ocr_text: str
     hocr: str
     bounding_box: BoundingBox
     embedding: List[float]
@@ -66,4 +67,3 @@ class SegmentationResponse(BaseModel):
     error_message: str
     segment_count: Optional[int]
     segments: Optional[List[ExtractedSegment]]
-    

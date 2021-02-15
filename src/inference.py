@@ -8,14 +8,13 @@ from model import get_inference_model
 from schemas import ModelOutput, BoundingBox
 import utils
 
-
-CATEGORIES = {0:"Photograph",
-              1:"Illustration",
-              2:"Map",
-              3:"Comics/Cartoons",
-              4:"Editorial Cartoon",
-              5:"Headline",
-              6:"Advertisement"}
+CATEGORIES = {0: "Photograph",
+              1: "Illustration",
+              2: "Map",
+              3: "Comics/Cartoons",
+              4: "Editorial Cartoon",
+              5: "Headline",
+              6: "Advertisement"}
 
 
 def image_to_model_input(image: PIL.Image.Image) -> Dict[str, torch.Tensor]:
@@ -38,9 +37,10 @@ def predict(image: PIL.Image.Image):
         classes = [CATEGORIES[num] for num in classes]
         normalized_bounding_boxes = []
         for box in bounding_boxes:
-            normalized_box = (box[0]/float(width), box[1]/float(height), box[2]/float(width), box[3]/float(height))
+            normalized_box = (
+                box[0] / float(width), box[1] / float(height), box[2] / float(width), box[3] / float(height))
             normalized_bounding_boxes.append(BoundingBox(upper_left_x=normalized_box[0],
-                                                         upper_left_y=normalized_box[1], 
+                                                         upper_left_y=normalized_box[1],
                                                          lower_right_x=normalized_box[2],
                                                          lower_right_y=normalized_box[3]))
         return ModelOutput(bounding_boxes=normalized_bounding_boxes,

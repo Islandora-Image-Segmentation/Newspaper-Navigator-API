@@ -24,42 +24,42 @@ app = FastAPI()
 
 @app.post("/api/segment_article")
 async def segment_article(request: schemas.SegmentationRequest) -> schemas.SegmentationResponse:
-  try:
-    image = utils.base64_to_image(request.image_base64)
-    standardized_image = utils.standardize_image(image)
-    model_output = inference.predict(standardized_image)
+    try:
+        image = utils.base64_to_image(request.image_base64)
+        standardized_image = utils.standardize_image(image)
+        model_output = inference.predict(standardized_image)
 
-    for i in range(len(model_output.confidences) - 1, -1,
-                   -1):  # Iterate backwards here because we're removing elements as we iterate
-      if model_output.confidences[i] < config.MINIMUM_CONFIDENCE_THRESHOLD:
-        del model_output.confidences[i]
-        del model_output.classes[i]
-        del model_output.bounding_boxes[i]
+        for i in range(len(model_output.confidences) - 1, -1,
+                       -1):  # Iterate backwards here because we're removing elements as we iterate
+            if model_output.confidences[i] < config.MINIMUM_CONFIDENCE_THRESHOLD:
+                del model_output.confidences[i]
+                del model_output.classes[i]
+                del model_output.bounding_boxes[i]
 
-    segment_images = [utils.crop(image, box).convert("RGB") for box in model_output.bounding_boxes]
-    segment_ocr = [ocr.retrieve_ocr(image) for image in segment_images]
-    segment_hocr = [ocr.retrieve_hocr(image) for image in segment_images]
-    segment_embeddings = [embedding.generate_embeddings(image).tolist() for image in segment_images]
+        segment_images = [utils.crop(image, box).convert("RGB") for box in model_output.bounding_boxes]
+        segment_ocr = [ocr.retrieve_ocr(image) for image in segment_images]
+        segment_hocr = [ocr.retrieve_hocr(image) for image in segment_images]
+        segment_embeddings = [embedding.generate_embeddings(image).tolist() for image in segment_images]
 
-    segments = []
-    for i in range(len(model_output.bounding_boxes)):
-      segment = schemas.ExtractedSegment(ocr_text=segment_ocr[i],
-                                         hocr=segment_hocr[i],
-                                         bounding_box=model_output.bounding_boxes[i],
-                                         embedding=segment_embeddings[i],
-                                         classification=model_output.classes[i],
-                                         confidence=model_output.confidences[i])
-      segments.append(segment)
+        segments = []
+        for i in range(len(model_output.bounding_boxes)):
+            segment = schemas.ExtractedSegment(ocr_text=segment_ocr[i],
+                                               hocr=segment_hocr[i],
+                                               bounding_box=model_output.bounding_boxes[i],
+                                               embedding=segment_embeddings[i],
+                                               classification=model_output.classes[i],
+                                               confidence=model_output.confidences[i])
+            segments.append(segment)
 
-    return schemas.SegmentationResponse(status_code=0,
-                                        error_message="",
-                                        segment_count=len(segments),
-                                        segments=segments)
-  except Exception as e:
-    return schemas.SegmentationResponse(status_code=-1,
-                                        error_message=f"Failed to process request due to {traceback.format_exc()}",
-                                        segment_count=None,
-                                        segments=None)
+        return schemas.SegmentationResponse(status_code=0,
+                                            error_message="",
+                                            segment_count=len(segments),
+                                            segments=segments)
+    except Exception as e:
+        return schemas.SegmentationResponse(status_code=-1,
+                                            error_message=f"Failed to process request due to {traceback.format_exc()}",
+                                            segment_count=None,
+                                            segments=None)
 
 
 uvicorn.run(app,
