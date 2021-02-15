@@ -13,7 +13,6 @@ TEST_ASSETS = os.path.join(CURRENT_SCRIPT_DIR, "test_assets")
 @pytest.mark.parametrize("image_file, expected", [
     ("test_image_one.png", ["This is a lot of 12 point text", "The quick brown dog", "over the lazy fox"]),
     ("test_image_two.png", ["to test", "Tesseract OCR"]),
-    ("test_advertisement_one.png", ["PRESCRIPTION", "scours"]),
 ])
 def test_ocr(image_file, expected):
     # Load first Image
@@ -30,7 +29,6 @@ def test_ocr(image_file, expected):
 @pytest.mark.parametrize("image_file, expected", [
     ("test_image_one.png", ["<!DOCTYPE html", "This", "brown", "fox"]),
     ("test_image_two.png", ["<!DOCTYPE html", "test", "Tesseract"]),
-    ("test_advertisement_one.png", ["<!DOCTYPE html", "PRESCRIPTION", "scours"]),
 ])
 def test_hocr(image_file, expected):
     # Load first Image
