@@ -1,7 +1,7 @@
 import PIL
 
 import torch
-from model import get_embedding_model        
+from model import get_embedding_model
 
 
 def generate_embeddings(image: PIL.Image.Image):
