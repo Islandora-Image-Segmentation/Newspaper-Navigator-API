@@ -18,6 +18,10 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+    - name: Download model
+      - run: |
+          mkdir src/resources
+          wget --load-cookies /tmp/cookies.txt "https://docs.google.com/uc?export=download&confirm=$(wget --save-cookies /tmp/cookies.txt --keep-session-cookies --no-check-certificate 'https://docs.google.com/uc?export=download&id=1qUu3uQ8imLGp-m4DYEY5KDCrNaaS2Pb-' -O- | sed -rn 's/.*confirm=([0-9A-Za-z_]+).*/\1\n/p')&id=1qUu3uQ8imLGp-m4DYEY5KDCrNaaS2Pb-" -O src/resources/model_final.pth && rm -rf /tmp/cookies.txt
     - name: Install tesseract
       run: sudo apt-get install -y tesseract-ocr
     - name: Set up Python 3.7
