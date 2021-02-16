@@ -3,6 +3,7 @@ from typing import Dict
 from PIL import Image
 import torch
 import numpy as np
+import utils
 
 from model import get_inference_model
 from schemas import ModelOutput, BoundingBox
@@ -16,7 +17,7 @@ CATEGORIES = {0: "Photograph",
               6: "Advertisement"}
 
 
-def image_to_model_input(image: PIL.Image.Image) -> Dict[str, torch.Tensor]:
+def image_to_model_input(image: Image.Image) -> Dict[str, torch.Tensor]:
     standardized_image = utils.standardize_image(image)
     image_array = np.asarray(standardized_image)
     image_array = np.transpose(image_array, (2, 0, 1))
