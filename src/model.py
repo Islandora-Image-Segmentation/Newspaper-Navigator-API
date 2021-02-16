@@ -1,11 +1,8 @@
-""" This module contains code for loading and fetching the pretrained 
-    PyTorch model weights from disk. """
-
 import os
 
 import detectron2
-from detectron2.config import get_cfg
 from detectron2 import model_zoo
+from detectron2.config import get_cfg
 from img2vec_pytorch import Img2Vec
 
 SCRIPT_DIRECTORY = os.path.dirname(os.path.abspath(__file__))

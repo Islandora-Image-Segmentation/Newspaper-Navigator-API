@@ -1,3 +1,4 @@
+requests==2.25.1
 Pillow==8.1.0
 img2vec-pytorch==0.2.5
 torch~=1.7.1
@@ -6,5 +7,5 @@ detectron2~=0.3
 pytesseract==0.3.7
 uvicorn==0.13.3
 fastapi==0.63.0
+numpy~=1.20.1
 pytest~=6.2.2
-numpy

@@ -1,8 +1,9 @@
+from enum import Enum
 from pydantic import BaseModel
-from PIL import Image
 from typing import List
 from typing import Optional
-from enum import Enum
+
+from PIL import Image
 
 
 class BoundingBox(BaseModel):
@@ -58,7 +59,11 @@ class ModelOutput(BaseModel):
     classes: List[str]
 
 
-class SegmentationRequest(BaseModel):
+class UrlSegmentationRequest(BaseModel):
+    image_url: str
+
+
+class Base64SegmentationRequest(BaseModel):
     image_base64: str
 
 

@@ -1,7 +1,7 @@
+import os
 import pytest
 from PIL import Image
 from utils import crop
-import os
 
 CURRENT_SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 
