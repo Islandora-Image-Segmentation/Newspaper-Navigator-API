@@ -1,6 +1,5 @@
 from PIL import Image
 import torch
-
 from model import get_embedding_model
 
 

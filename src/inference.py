@@ -7,7 +7,6 @@ import numpy as np
 from model import get_inference_model
 from schemas import ModelOutput, BoundingBox
 
-
 CATEGORIES = {0: "Photograph",
               1: "Illustration",
               2: "Map",
@@ -17,8 +16,9 @@ CATEGORIES = {0: "Photograph",
               6: "Advertisement"}
 
 
-def image_to_model_input(image: Image.Image) -> Dict[str, torch.Tensor]:
-    image_array = np.asarray(image)
+def image_to_model_input(image: PIL.Image.Image) -> Dict[str, torch.Tensor]:
+    standardized_image = utils.standardize_image(image)
+    image_array = np.asarray(standardized_image)
     image_array = np.transpose(image_array, (2, 0, 1))
     return {"image": torch.from_numpy(image_array.copy())}
 
