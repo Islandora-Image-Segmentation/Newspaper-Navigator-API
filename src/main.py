@@ -49,7 +49,7 @@ async def segment_url(request: schemas.UrlSegmentationRequest) -> schemas.Segmen
                                             segments=None)
 
 
-@app.post("/api/segment_article")
+@app.post("/api/segment_base64")
 async def segment_base64(request: schemas.Base64SegmentationRequest) -> schemas.SegmentationResponse:
     try:
         image = utils.base64_to_image(request.image_base64)
