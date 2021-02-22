@@ -6,6 +6,8 @@ import io
 import uvicorn
 from fastapi import FastAPI
 from fastapi import File
+from fastapi import Response
+from fastapi import status
 from PIL import Image
 
 import config
@@ -17,7 +19,7 @@ app = FastAPI()
 
 
 @app.post("/api/segment_formdata")
-async def segment_formdata(image_file: bytes = File(...)) -> schemas.SegmentationResponse:
+async def segment_formdata(response: Response, image_file: bytes = File(...)) -> schemas.SegmentationResponse:
     try:
         image = Image.open(io.BytesIO(image_file))
         segments = pipeline.segment_image(image)
@@ -26,6 +28,7 @@ async def segment_formdata(image_file: bytes = File(...)) -> schemas.Segmentatio
                                             segment_count=len(segments),
                                             segments=segments)
     except Exception as e:
+        response.status_code = status.HTTP_500_INTERNAL_SERVER_ERROR 
         return schemas.SegmentationResponse(status_code=-1,
                                             error_message=f"Failed to process request due to {traceback.format_exc()}",
                                             segment_count=None,
@@ -33,7 +36,7 @@ async def segment_formdata(image_file: bytes = File(...)) -> schemas.Segmentatio
 
 
 @app.post("/api/segment_url")
-async def segment_url(request: schemas.UrlSegmentationRequest) -> schemas.SegmentationResponse:
+async def segment_url(request: schemas.UrlSegmentationRequest, response: Response) -> schemas.SegmentationResponse:
     try:
         assert re.match(config.URL_REGEX, request.image_url)
         image = utils.download_image(request.image_url)
@@ -43,6 +46,7 @@ async def segment_url(request: schemas.UrlSegmentationRequest) -> schemas.Segmen
                                             segment_count=len(segments),
                                             segments=segments)
     except Exception as e:
+        response.status_code = status.HTTP_500_INTERNAL_SERVER_ERROR 
         return schemas.SegmentationResponse(status_code=-1,
                                             error_message=f"Failed to process request due to {traceback.format_exc()}",
                                             segment_count=None,
@@ -50,7 +54,7 @@ async def segment_url(request: schemas.UrlSegmentationRequest) -> schemas.Segmen
 
 
 @app.post("/api/segment_article")
-async def segment_base64(request: schemas.Base64SegmentationRequest) -> schemas.SegmentationResponse:
+async def segment_base64(request: schemas.Base64SegmentationRequest, response: Response) -> schemas.SegmentationResponse:
     try:
         image = utils.base64_to_image(request.image_base64)
         segments = pipeline.segment_image(image)
@@ -59,6 +63,7 @@ async def segment_base64(request: schemas.Base64SegmentationRequest) -> schemas.
                                             segment_count=len(segments),
                                             segments=segments)
     except Exception as e:
+        response.status_code = status.HTTP_500_INTERNAL_SERVER_ERROR 
         return schemas.SegmentationResponse(status_code=-1,
                                             error_message=f"Failed to process request due to {traceback.format_exc()}",
                                             segment_count=None,
