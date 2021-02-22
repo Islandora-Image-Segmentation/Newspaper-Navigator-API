@@ -8,6 +8,11 @@ import requests
 import config
 
 
+FILE_DOWNLOAD_HEADERS = {
+    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) Apple'
+                  'WebKit/537.36 (KHTML, like Gecko) '
+                  'Chrome/74.0.3729.157 Safari/537.36'}
+
 
 def crop(image: Image.Image, box) -> Image.Image:
     """Crop the image according to box, which should contain normalized coordinates."""
@@ -37,7 +42,8 @@ def download_image(image_url: str) -> Image.Image:
     assert re.match(config.URL_REGEX, image_url) is not None  # confirm that it's a valid URL
     response = requests.get(image_url,
                             verify=False,
-                            timeout=config.IMAGE_DOWNLOAD_TIMEOUT)
+                            timeout=config.IMAGE_DOWNLOAD_TIMEOUT,
+                            headers=FILE_DOWNLOAD_HEADERS)
     if response.status_code == 200:
         image_bytes = io.BytesIO(response.content)
         return Image.open(image_bytes)
