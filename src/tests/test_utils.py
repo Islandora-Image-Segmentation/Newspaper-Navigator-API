@@ -3,18 +3,12 @@ import pytest
 from PIL import Image
 from utils import crop
 
-CURRENT_SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
-
-# Absolute path to test_assets
-TEST_ASSETS = os.path.join(CURRENT_SCRIPT_DIR, "test_assets")
-
-"""Crop function test"""
-
+from . import TEST_ASSETS_DIR
 
 @pytest.mark.parametrize("test_image", ["test_image_one.png", "test_image_two.png"])
 def test_crop(test_image):
     # Load Image
-    img = Image.open(os.path.join(TEST_ASSETS, "test_image_one.png"))
+    img = Image.open(os.path.join(TEST_ASSETS_DIR, "test_image_one.png"))
 
     # Extract width and height of original image
     initial_width, initial_height = img.size
