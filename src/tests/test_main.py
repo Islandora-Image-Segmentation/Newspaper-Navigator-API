@@ -57,7 +57,7 @@ def test_url_newspaper():
 
 
 def test_formdata_invalid_file():
-    file_path = os.path.join(TEST_ASSETS_DIR, "__init__.py"))
+    file_path = os.path.join(TESTS_DIR, "__init__.py")
     invalid_file = {'image_file': open(file_path, 'rb')}
     response = client.post("/api/segment_formdata", files=invalid_file)
     assert response.json()["status_code"] != 0
