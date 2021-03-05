@@ -33,3 +33,24 @@ def test_base64_newspaper():
     response = client.post("/api/segment_base64", json={"image_base64": base64})
     assert response.json()["status_code"] == 0
     assert response.json()["segment_count"] > 0
+
+
+def test_url_invalid():
+    url = "this is not a valid url"
+    response = client.post("/api/segment_url", json={"image_url": url})
+    assert response.json()["status_code"] == -1
+    assert response.json()["segment_count"] is None
+
+
+def test_url_shapes():
+    url = "https://upload.wikimedia.org/wikipedia/en/9/95/Test_image.jpg"
+    response = client.post("/api/segment_url", json={"image_url": url})
+    assert response.json()["status_code"] == 0
+    assert response.json()["segment_count"] == 0
+
+
+def test_url_newspaper():
+    url = "https://www.theguardian.pe.ca/media/photologue/photos/cache/TG-web-14062018-Guardian_past-sb_large.jpg"
+    response = client.post("/api/segment_url", json={"image_url": url})
+    assert response.json()["status_code"] == 0
+    assert response.json()["segment_count"] > 0
