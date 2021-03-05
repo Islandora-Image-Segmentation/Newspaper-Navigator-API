@@ -4,7 +4,7 @@ import os
 from fastapi.testclient import TestClient
 from PIL import Image
 
-from . import TEST_ASSETS_DIR
+from . import TEST_ASSETS_DIR, TESTS_DIR
 from main import app
 from utils import image_to_base64
 
