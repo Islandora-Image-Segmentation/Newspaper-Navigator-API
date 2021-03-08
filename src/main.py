@@ -17,18 +17,7 @@ import utils
 app = FastAPI()
 
 
-@app.post("/api/segment_test")
-async def segment_test() -> schemas.SegmentationResponse:
-    try:
-        import pickle
-        pickle_path = os.path.join(config.RESOURCES_DIR, "response.pkl")
-        response = pickle.load(open(pickle_path, "rb"))
-        return response
-    except Exception as e:
-        return schemas.SegmentationResponse(status_code=-1,
-                                            error_message=f"Failed to process request due to {traceback.format_exc()}",
-                                            segment_count=None,
-                                            segments=None)
+
 
 @app.post("/api/segment_formdata")
 async def segment_formdata(image_file: bytes = File(...)) -> schemas.SegmentationResponse:
@@ -78,6 +67,45 @@ async def segment_base64(request: schemas.Base64SegmentationRequest) -> schemas.
                                             segment_count=None,
                                             segments=None)
 
+def get_canned_response():
+    import pickle
+    pickle_path = os.path.join(config.RESOURCES_DIR, "response.pkl")
+    return pickle.load(open(pickle_path, "rb"))
+
+
+@app.post("/test/segment_base64")
+async def test_segment_base64(request: schemas.Base64SegmentationRequest) -> schemas.SegmentationResponse:
+    try:
+        return get_canned_response()
+    except Exception as e:
+        return schemas.SegmentationResponse(status_code=-1,
+                                            error_message=f"Failed to process request due to {traceback.format_exc()}",
+                                            segment_count=None,
+                                            segments=None)
+
+
+@app.post("/test/segment_url")
+async def test_segment_url(request: schemas.UrlSegmentationRequest) -> schemas.SegmentationResponse:
+    try:
+        return get_canned_response()
+    except Exception as e:
+        return schemas.SegmentationResponse(status_code=-1,
+                                            error_message=f"Failed to process request due to {traceback.format_exc()}",
+                                            segment_count=None,
+                                            segments=None)
+
+
+@app.post("/test/segment_formdata")
+async def test_segment_formdata(image_file: bytes = File(...)) -> schemas.SegmentationResponse:
+    try:
+        return get_canned_response()
+    except Exception as e:
+        return schemas.SegmentationResponse(status_code=-1,
+                                            error_message=f"Failed to process request due to {traceback.format_exc()}",
+                                            segment_count=None,
+                                            segments=None)
+
+                                            
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--port", "-p", type=int, default=8000)
