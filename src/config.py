@@ -2,6 +2,7 @@ import os
 import re
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+RESOURCES_DIR = os.path.join(SCRIPT_DIR, "resources")
 MAX_IMAGE_SIZE = 3840
 MINIMUM_CONFIDENCE_THRESHOLD = 0.666
 IMAGE_DOWNLOAD_TIMEOUT = 5

@@ -63,6 +63,11 @@ class ExtractedSegment(BaseModel):
 
 Note:  If something goes wrong with your request, the `status_code` of the response will be non-zero and the reason will be returned in `error_message`. In that case, `segment_count` and `segments` will be null so make sure to check the `status_code` of the response before accessing those fields.
 
+## Running the tests
+The API uses PyTest for testing. Tests are located in `/src/tests`.
+You can run the tests by navigating to `src` and calling `pytest` in your terminal.
+Note that this will require you to have already downloaded the model weights.
+
 ## Pipeline
 Images go through a pipeline that can be broken into the following steps:
 
