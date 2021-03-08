@@ -2,6 +2,7 @@ import argparse
 import re
 import traceback
 import io
+import os
 
 import uvicorn
 from fastapi import FastAPI
@@ -15,6 +16,19 @@ import utils
 
 app = FastAPI()
 
+
+@app.post("/api/segment_test")
+async def segment_test() -> schemas.SegmentationResponse:
+    try:
+        import pickle
+        pickle_path = os.path.join(config.RESOURCES_DIR, "response.pkl")
+        response = pickle.load(open(pickle_path, "rb"))
+        return response
+    except Exception as e:
+        return schemas.SegmentationResponse(status_code=-1,
+                                            error_message=f"Failed to process request due to {traceback.format_exc()}",
+                                            segment_count=None,
+                                            segments=None)
 
 @app.post("/api/segment_formdata")
 async def segment_formdata(image_file: bytes = File(...)) -> schemas.SegmentationResponse:
