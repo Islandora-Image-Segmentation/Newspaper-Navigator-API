@@ -1,15 +1,17 @@
-from pydantic import BaseModel
-from PIL import Image
-from typing import List
 from enum import Enum
+from pydantic import BaseModel
+from typing import List
+from typing import Optional
+
+from PIL import Image
 
 
 class BoundingBox(BaseModel):
     """ Data wrapper for bounding box coordinates. """
-    upper_left_x: int
-    upper_left_y: int
-    lower_right_x: int
-    lower_right_y: int
+    upper_left_x: float
+    upper_left_y: float
+    lower_right_x: float
+    lower_right_y: float
 
     def __getitem__(self, i):
         if i < 0 or i > 3:
@@ -24,9 +26,6 @@ class BoundingBox(BaseModel):
             return self.lower_right_y
 
 
-
-# Object type enum
-
 class Categories(Enum):
     illustration = 'illustration'
     photograph = "photograph"
@@ -35,21 +34,41 @@ class Categories(Enum):
     map = "map"
     headline = "headline"
     ad = "ad"
-    
-# Original newspaper extract
 
 
 class Article(BaseModel):
+    class Config:
+        arbitrary_types_allowed = True
+
     image: Image.Image
     metadata: dict
 
-# Segments extracted from article image
 
 class ExtractedSegment(BaseModel):
-    image: Image.Image
-    text: str
-    box: BoundingBox
-    embeddings: List[int]
-    category: Categories
+    ocr_text: str
+    hocr: str
+    bounding_box: BoundingBox
+    embedding: List[float]
+    classification: str
     confidence: float
-    parent_ref: Article
+
+
+class ModelOutput(BaseModel):
+    bounding_boxes: List[BoundingBox]
+    confidences: List[float]
+    classes: List[str]
+
+
+class UrlSegmentationRequest(BaseModel):
+    image_url: str
+
+
+class Base64SegmentationRequest(BaseModel):
+    image_base64: str
+
+
+class SegmentationResponse(BaseModel):
+    status_code: int
+    error_message: str
+    segment_count: Optional[int]
+    segments: Optional[List[ExtractedSegment]]
