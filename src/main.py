@@ -10,6 +10,7 @@ from fastapi import File
 from fastapi.security import APIKeyHeader
 from fastapi import Security
 from fastapi import HTTPException
+from fastapi import Request
 from starlette.status import HTTP_401_UNAUTHORIZED
 from PIL import Image
 
@@ -22,7 +23,7 @@ import utils
 app = FastAPI()
 
 _api_key = None
-X_API_KEY = APIKeyHeader(name='X-API-Key', auto_error=False)
+X_API_KEY = APIKeyHeader(name='X-API-KEY', auto_error=False)
 async def validate_api_key(api_key_header: str = Security(X_API_KEY)):
     global _api_key
     if _api_key:
@@ -33,8 +34,8 @@ async def validate_api_key(api_key_header: str = Security(X_API_KEY)):
             )
 
 
-@app.post("/api/segment_formdata")
-async def segment_formdata(image_file: bytes = File(...), dependencies=[Security(validate_api_key)]) -> schemas.SegmentationResponse:
+@app.post("/api/segment_formdata", dependencies=[Security(validate_api_key)])
+async def segment_formdata(image_file: bytes = File(...)) -> schemas.SegmentationResponse:
     try:
         image = Image.open(io.BytesIO(image_file))
         segments = pipeline.segment_image(image)
@@ -49,8 +50,8 @@ async def segment_formdata(image_file: bytes = File(...), dependencies=[Security
                                             segments=None)
 
 
-@app.post("/api/segment_url")
-async def segment_url(request: schemas.UrlSegmentationRequest, dependencies=[Security(validate_api_key)]) -> schemas.SegmentationResponse:
+@app.post("/api/segment_url", dependencies=[Security(validate_api_key)])
+async def segment_url(request: schemas.UrlSegmentationRequest) -> schemas.SegmentationResponse:
     try:
         assert re.match(config.URL_REGEX, request.image_url)
         image = utils.download_image(request.image_url)
