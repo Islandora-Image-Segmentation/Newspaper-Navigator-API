@@ -25,6 +25,9 @@ def image_to_model_input(image: Image.Image) -> Dict[str, torch.Tensor]:
 
 
 def predict(image: Image.Image):
+    """ Take an image and run it through the inference model. This returns a ModelOutput object with all of the 
+    information that the model returns. Furthermore, bounding box coordinates are normalized.
+    """
     width, height = image.size
     model = get_inference_model()
     model.eval()

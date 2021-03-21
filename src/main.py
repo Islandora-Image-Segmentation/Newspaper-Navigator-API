@@ -1,3 +1,8 @@
+""" This module is the main entry point for the API.
+    It contains all of the endpoint definitions and the CLI.
+    The API can be launched by executing this module. See the README for more information.
+"""
+
 import argparse
 import re
 import traceback
@@ -15,8 +20,6 @@ import schemas
 import utils
 
 app = FastAPI()
-
-
 
 
 @app.post("/api/segment_formdata")

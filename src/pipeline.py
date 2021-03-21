@@ -14,8 +14,8 @@ def segment_image(image: Image.Image) -> List[schemas.ExtractedSegment]:
     standardized_image = utils.standardize_image(image)
     model_output = inference.predict(standardized_image)
 
-    for i in range(len(model_output.confidences) - 1, -1,
-                   -1):  # Iterate backwards here because we're removing elements as we iterate
+    # Iterate backwards here because we're removing elements as we iterate
+    for i in range(len(model_output.confidences) - 1, -1, -1):  
         if model_output.confidences[i] < config.MINIMUM_CONFIDENCE_THRESHOLD:
             del model_output.confidences[i]
             del model_output.classes[i]
