@@ -5,6 +5,9 @@ from detectron2 import model_zoo
 from detectron2.config import get_cfg
 from img2vec_pytorch import Img2Vec
 
+import config
+
+
 SCRIPT_DIRECTORY = os.path.dirname(os.path.abspath(__file__))
 RESOURCES_DIRECTORY = os.path.join(SCRIPT_DIRECTORY, "resources")
 INFERENCE_MODEL_WEIGHTS = os.path.join(RESOURCES_DIRECTORY, "model_final.pth")
@@ -19,10 +22,10 @@ def get_inference_model():
     return _inference_model
 
 
-def get_embedding_model():
+def get_embedding_model(use_cpu=config.USE_CPU):
     global _embedding_model
     if _embedding_model is None:
-        _embedding_model = Img2Vec(cuda=False, model='resnet-18')  # Smaller model runs faster on CPU
+        _embedding_model = Img2Vec(cuda=not use_cpu, model='resnet-18')
     return _embedding_model
 
 
@@ -38,9 +41,10 @@ def load_inference_model_from_disk():
             f"Could not find the model weights at {INFERENCE_MODEL_WEIGHTS}. Please follow installation instructions to download the weights.")
 
 
-def build_detectron_config():
+def build_detectron_config(use_cpu=config.USE_CPU):
     model_config = get_cfg()
     model_config.merge_from_file(model_zoo.get_config_file("COCO-Detection/faster_rcnn_R_50_FPN_3x.yaml"))
     model_config.MODEL.ROI_HEADS.NUM_CLASSES = 7
-    model_config.MODEL.DEVICE = 'cpu'
+    if use_cpu:
+        model_config.MODEL.DEVICE = 'cpu'
     return model_config
