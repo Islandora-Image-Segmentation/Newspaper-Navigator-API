@@ -7,6 +7,11 @@ import os
 import uvicorn
 from fastapi import FastAPI
 from fastapi import File
+from fastapi.security import APIKeyHeader
+from fastapi import Security
+from fastapi import HTTPException
+from fastapi import Request
+from starlette.status import HTTP_401_UNAUTHORIZED
 from PIL import Image
 
 import config
@@ -14,12 +19,22 @@ import pipeline
 import schemas
 import utils
 
+
 app = FastAPI()
 
+_api_key = None
+X_API_KEY = APIKeyHeader(name='X-API-KEY', auto_error=False)
+async def validate_api_key(api_key_header: str = Security(X_API_KEY)):
+    global _api_key
+    if _api_key:
+        if api_key_header != _api_key:
+            raise HTTPException(
+                status_code=HTTP_401_UNAUTHORIZED,
+                detail="Invalid API key.",
+            )
 
 
-
-@app.post("/api/segment_formdata")
+@app.post("/api/segment_formdata", dependencies=[Security(validate_api_key)])
 async def segment_formdata(image_file: bytes = File(...)) -> schemas.SegmentationResponse:
     try:
         image = Image.open(io.BytesIO(image_file))
@@ -35,7 +50,7 @@ async def segment_formdata(image_file: bytes = File(...)) -> schemas.Segmentatio
                                             segments=None)
 
 
-@app.post("/api/segment_url")
+@app.post("/api/segment_url", dependencies=[Security(validate_api_key)])
 async def segment_url(request: schemas.UrlSegmentationRequest) -> schemas.SegmentationResponse:
     try:
         assert re.match(config.URL_REGEX, request.image_url)
@@ -52,7 +67,7 @@ async def segment_url(request: schemas.UrlSegmentationRequest) -> schemas.Segmen
                                             segments=None)
 
 
-@app.post("/api/segment_base64")
+@app.post("/api/segment_base64", dependencies=[Security(validate_api_key)])
 async def segment_base64(request: schemas.Base64SegmentationRequest) -> schemas.SegmentationResponse:
     try:
         image = utils.base64_to_image(request.image_base64)
@@ -67,13 +82,14 @@ async def segment_base64(request: schemas.Base64SegmentationRequest) -> schemas.
                                             segment_count=None,
                                             segments=None)
 
+
 def get_canned_response():
     import pickle
     pickle_path = os.path.join(config.RESOURCES_DIR, "response.pkl")
     return pickle.load(open(pickle_path, "rb"))
 
 
-@app.post("/test/segment_base64")
+@app.post("/test/segment_base64", dependencies=[Security(validate_api_key)])
 async def test_segment_base64(request: schemas.Base64SegmentationRequest) -> schemas.SegmentationResponse:
     try:
         return get_canned_response()
@@ -84,7 +100,7 @@ async def test_segment_base64(request: schemas.Base64SegmentationRequest) -> sch
                                             segments=None)
 
 
-@app.post("/test/segment_url")
+@app.post("/test/segment_url", dependencies=[Security(validate_api_key)])
 async def test_segment_url(request: schemas.UrlSegmentationRequest) -> schemas.SegmentationResponse:
     try:
         return get_canned_response()
@@ -95,7 +111,7 @@ async def test_segment_url(request: schemas.UrlSegmentationRequest) -> schemas.S
                                             segments=None)
 
 
-@app.post("/test/segment_formdata")
+@app.post("/test/segment_formdata", dependencies=[Security(validate_api_key)])
 async def test_segment_formdata(image_file: bytes = File(...)) -> schemas.SegmentationResponse:
     try:
         return get_canned_response()
@@ -110,10 +126,13 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--port", "-p", type=int, default=8000)
     parser.add_argument("--host", type=str, default="0.0.0.0")
-    parser.add_argument("--log_level", "-l", type=str,
-                        default="info")  # Possible options are: critical, error, warning, info, debug, trace
-    parser.add_argument("--timeout", "-t", type=int, default=30)  # Timeout in seconds
+    parser.add_argument("--log_level", "-l", type=str, default="info")  
+    parser.add_argument("--timeout", "-t", type=int, default=30)  
+    parser.add_argument("--api_key", "-k", type=str, default=None)
     args = parser.parse_args()
+
+    if args.api_key:
+        _api_key = str(args.api_key)
 
     uvicorn.run(app,
                 port=args.port,
