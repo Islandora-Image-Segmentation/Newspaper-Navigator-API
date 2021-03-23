@@ -1,8 +1,9 @@
-from inference import predict
-from PIL import Image
 import os
+from PIL import Image
+from inference import predict
 
 from . import TEST_ASSETS_DIR
+
 
 def test_inference_one():
     # Load first Image
