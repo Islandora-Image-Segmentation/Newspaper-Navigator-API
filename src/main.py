@@ -129,7 +129,6 @@ if __name__ == "__main__":
     parser.add_argument("--log_level", "-l", type=str, default="info")  
     parser.add_argument("--timeout", "-t", type=int, default=30)  
     parser.add_argument("--api_key", "-k", type=str, default=None)
-    parser.add_argument("--use_gpu", type=bool, default=False)
     args = parser.parse_args()
 
     if args.api_key:
