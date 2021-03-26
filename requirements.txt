@@ -11,4 +11,3 @@ python-multipart==0.0.05
 av
 cloudpickle
 future
-fvcore
