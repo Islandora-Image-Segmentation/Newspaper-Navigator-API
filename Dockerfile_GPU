@@ -1,0 +1,16 @@
+FROM nvidia/cuda:11.2-cudnn8-devel
+
+RUN apt update -y
+RUN apt upgrade -y 
+
+RUN apt install -y tesseract-ocr
+RUN apt install -y libtesseract-dev
+
+pip install torch==1.8.1+cu111 torchvision==0.9.1+cu111 torchaudio==0.8.1 -f https://download.pytorch.org/whl/torch_stable.html
+RUN pip install 'git+https://github.com/facebookresearch/detectron2.git'
+
+COPY ./requirements.txt /requirements.txt
+RUN pip install -r /requirements.txt
+
+COPY ./src /src
+echo "USE_CPU=False" >> /src/config.py
