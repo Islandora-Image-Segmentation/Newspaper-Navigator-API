@@ -33,11 +33,12 @@ Alternatively, you can build a Docker container containing all the dependencies 
 For example, you can do `python main.py --port 5000` to launch on port 5000 instead.
 
 ## Using GPU
-Set `USE_CPU` in `config.py` to `False`.
-Install the latest Nvidia drivers.
-Install CUDA toolkit.
-If using Docker, install nvidia-container-toolkit.
-If using Docker, launch `docker-compose-GPU.yml` instead of `docker-compose.yml` by doing `docker-compose -f docker-compose-GPU.yml up`.
+1. Set `USE_CPU` in `config.py` to `False`.
+2. Install the latest Nvidia drivers.
+3. Install CUDA toolkit.
+4. Make sure your Torch version supports CUDA.
+6. If using Docker, install nvidia-container-toolkit.
+7. If using Docker, do `docker-compose -f docker-compose-GPU.yml up` instead of `docker-compose up`.
 
 
 ## Endpoints
