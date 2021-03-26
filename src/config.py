@@ -1,9 +1,9 @@
 import os
 import re
 
+USE_CPU = True
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 RESOURCES_DIR = os.path.join(SCRIPT_DIR, "resources")
-USE_CPU = True
 MAX_IMAGE_SIZE = 3840
 MINIMUM_CONFIDENCE_THRESHOLD = 0.666
 IMAGE_DOWNLOAD_TIMEOUT = 5
