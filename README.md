@@ -38,7 +38,7 @@ For example, you can do `python main.py --port 5000` to launch on port 5000 inst
 3. Install CUDA toolkit.
 4. Make sure your Torch version supports CUDA.
 6. If using Docker, install nvidia-container-toolkit.
-7. If using Docker, do `docker-compose -f docker-compose-GPU.yml up` instead of `docker-compose up`.
+7. If using Docker, do `docker-compose -f docker-compose_GPU.yml up` instead of `docker-compose up`.
 
 
 ## Endpoints
