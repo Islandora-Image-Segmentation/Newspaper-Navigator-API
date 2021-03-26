@@ -32,6 +32,14 @@ Alternatively, you can build a Docker container containing all the dependencies 
 
 For example, you can do `python main.py --port 5000` to launch on port 5000 instead.
 
+## Using GPU
+Set `USE_CPU` in `config.py` to `False`.
+Install the latest Nvidia drivers.
+Install CUDA toolkit.
+If using Docker, install nvidia-container-toolkit.
+If using Docker, launch `docker-compose-GPU.yml` instead of `docker-compose.yml` by doing `docker-compose -f docker-compose-GPU.yml up`.
+
+
 ## Endpoints
 The API has the following endpoints:
 
