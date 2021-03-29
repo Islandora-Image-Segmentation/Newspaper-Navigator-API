@@ -6,6 +6,7 @@ RUN apt upgrade -y
 RUN apt install -y tesseract-ocr
 RUN apt install -y libtesseract-dev
 
+RUN pip install -U 'git+https://github.com/facebookresearch/fvcore'
 pip install torch==1.8.1+cu111 torchvision==0.9.1+cu111 torchaudio==0.8.1 -f https://download.pytorch.org/whl/torch_stable.html
 RUN pip install 'git+https://github.com/facebookresearch/detectron2.git'
 
