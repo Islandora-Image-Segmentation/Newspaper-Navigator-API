@@ -1,9 +1,8 @@
+from PIL import Image
 from enum import Enum
 from pydantic import BaseModel
 from typing import List
 from typing import Optional
-
-from PIL import Image
 
 
 class BoundingBox(BaseModel):

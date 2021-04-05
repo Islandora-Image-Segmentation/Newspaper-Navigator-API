@@ -1,9 +1,10 @@
 import os
 import pytest
-from ocr import retrieve_ocr, retrieve_hocr
 from PIL import Image
+from ocr import retrieve_ocr, retrieve_hocr
 
 from . import TEST_ASSETS_DIR
+
 
 def get_ocr_test_data():
     return [('test_image_one.png', "This is a lot of 12 point text"), ('test_image_one.png', "The quick brown dog"),

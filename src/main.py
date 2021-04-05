@@ -4,31 +4,30 @@
 """
 
 import argparse
-import re
-import traceback
+import config
 import io
 import os
-
+import pipeline
+import re
+import schemas
+import traceback
+import utils
 import uvicorn
+from PIL import Image
 from fastapi import FastAPI
 from fastapi import File
-from fastapi.security import APIKeyHeader
-from fastapi import Security
 from fastapi import HTTPException
 from fastapi import Request
+from fastapi import Security
+from fastapi.security import APIKeyHeader
 from starlette.status import HTTP_401_UNAUTHORIZED
-from PIL import Image
-
-import config
-import pipeline
-import schemas
-import utils
-
 
 app = FastAPI()
 
 _api_key = None
 X_API_KEY = APIKeyHeader(name='X-API-KEY', auto_error=False)
+
+
 async def validate_api_key(api_key_header: str = Security(X_API_KEY)):
     global _api_key
     if _api_key:
@@ -126,13 +125,13 @@ async def test_segment_formdata(image_file: bytes = File(...)) -> schemas.Segmen
                                             segment_count=None,
                                             segments=None)
 
-                                            
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("--port", "-p", type=int, default=8000)
+    parser.add_argument("--port", "-p", type=int, default=8008)
     parser.add_argument("--host", type=str, default="0.0.0.0")
-    parser.add_argument("--log_level", "-l", type=str, default="info")  
-    parser.add_argument("--timeout", "-t", type=int, default=30)  
+    parser.add_argument("--log_level", "-l", type=str, default="info")
+    parser.add_argument("--timeout", "-t", type=int, default=30)
     parser.add_argument("--api_key", "-k", type=str, default=None)
     args = parser.parse_args()
 

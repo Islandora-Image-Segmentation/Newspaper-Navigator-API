@@ -1,12 +1,10 @@
-from typing import Dict
-
-from PIL import Image
-import torch
 import numpy as np
+import torch
 import utils
-
+from PIL import Image
 from model import get_inference_model
 from schemas import ModelOutput, BoundingBox
+from typing import Dict
 
 CATEGORIES = {0: "Photograph",
               1: "Illustration",
@@ -41,7 +39,7 @@ def predict(image: Image.Image):
         normalized_bounding_boxes = []
         for box in bounding_boxes:
             normalized_box = (
-            box[0] / float(width), box[1] / float(height), box[2] / float(width), box[3] / float(height))
+                box[0] / float(width), box[1] / float(height), box[2] / float(width), box[3] / float(height))
             normalized_bounding_boxes.append(BoundingBox(upper_left_x=normalized_box[0],
                                                          upper_left_y=normalized_box[1],
                                                          lower_right_x=normalized_box[2],

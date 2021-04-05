@@ -1,12 +1,9 @@
 import base64
+import config
 import io
 import re
-
-from PIL import Image
 import requests
-
-import config
-
+from PIL import Image
 
 FILE_DOWNLOAD_HEADERS = {
     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) Apple'
@@ -36,8 +33,8 @@ def image_to_base64(image: Image.Image, image_format="JPEG2000") -> str:
 def base64_to_image(base64_string: str) -> Image.Image:
     image_bytes = base64.b64decode(base64_string)
     return Image.open(io.BytesIO(image_bytes))
-  
-  
+
+
 def download_image(image_url: str) -> Image.Image:
     assert re.match(config.URL_REGEX, image_url) is not None  # confirm that it's a valid URL
     response = requests.get(image_url,
