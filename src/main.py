@@ -24,10 +24,19 @@ _api_key = None
 X_API_KEY = APIKeyHeader(name='X-API-KEY', auto_error=False)
 
 
+def error_response(e):
+    logging.error(f"Endpoint raised an error: {traceback.format_exc()}")
+    return schemas.SegmentationResponse(status_code=-1,
+                                            error_message=f"Failed to process request due to {traceback.format_exc()}",
+                                            segment_count=None,
+                                            segments=None)
+
+
 async def validate_api_key(api_key_header: str = Security(X_API_KEY)):
     global _api_key
     if _api_key:
         if api_key_header != _api_key:
+            logging.error(f"Received invalid API key: {api_key_header}")
             raise HTTPException(
                 status_code=HTTP_401_UNAUTHORIZED,
                 detail="Invalid API key.",
@@ -44,11 +53,8 @@ async def segment_formdata(image_file: bytes = File(...)) -> schemas.Segmentatio
                                             segment_count=len(segments),
                                             segments=segments)
     except Exception as e:
-        return schemas.SegmentationResponse(status_code=-1,
-                                            error_message=f"Failed to process request due to {traceback.format_exc()}",
-                                            segment_count=None,
-                                            segments=None)
-
+        return error_response(e)
+        
 
 @app.post("/api/segment_url", dependencies=[Security(validate_api_key)])
 async def segment_url(request: schemas.UrlSegmentationRequest) -> schemas.SegmentationResponse:
@@ -61,10 +67,7 @@ async def segment_url(request: schemas.UrlSegmentationRequest) -> schemas.Segmen
                                             segment_count=len(segments),
                                             segments=segments)
     except Exception as e:
-        return schemas.SegmentationResponse(status_code=-1,
-                                            error_message=f"Failed to process request due to {traceback.format_exc()}",
-                                            segment_count=None,
-                                            segments=None)
+        return error_response(e)
 
 
 @app.post("/api/segment_base64", dependencies=[Security(validate_api_key)])
@@ -77,13 +80,11 @@ async def segment_base64(request: schemas.Base64SegmentationRequest) -> schemas.
                                             segment_count=len(segments),
                                             segments=segments)
     except Exception as e:
-        return schemas.SegmentationResponse(status_code=-1,
-                                            error_message=f"Failed to process request due to {traceback.format_exc()}",
-                                            segment_count=None,
-                                            segments=None)
+        return error_response(e)
 
 
 def get_canned_response():
+    logging.info("Returning canned response...")
     import pickle
     pickle_path = os.path.join(config.RESOURCES_DIR, "response.pkl")
     return pickle.load(open(pickle_path, "rb"))
@@ -94,10 +95,7 @@ async def test_segment_base64(request: schemas.Base64SegmentationRequest) -> sch
     try:
         return get_canned_response()
     except Exception as e:
-        return schemas.SegmentationResponse(status_code=-1,
-                                            error_message=f"Failed to process request due to {traceback.format_exc()}",
-                                            segment_count=None,
-                                            segments=None)
+        return error_response(e)
 
 
 @app.post("/test/segment_url", dependencies=[Security(validate_api_key)])
@@ -105,10 +103,7 @@ async def test_segment_url(request: schemas.UrlSegmentationRequest) -> schemas.S
     try:
         return get_canned_response()
     except Exception as e:
-        return schemas.SegmentationResponse(status_code=-1,
-                                            error_message=f"Failed to process request due to {traceback.format_exc()}",
-                                            segment_count=None,
-                                            segments=None)
+        return error_response(e)
 
 
 @app.post("/test/segment_formdata", dependencies=[Security(validate_api_key)])
@@ -116,10 +111,7 @@ async def test_segment_formdata(image_file: bytes = File(...)) -> schemas.Segmen
     try:
         return get_canned_response()
     except Exception as e:
-        return schemas.SegmentationResponse(status_code=-1,
-                                            error_message=f"Failed to process request due to {traceback.format_exc()}",
-                                            segment_count=None,
-                                            segments=None)
+        return error_response(e)
 
 
 if __name__ == "__main__":
