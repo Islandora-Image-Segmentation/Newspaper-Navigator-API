@@ -3,7 +3,7 @@ import re
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 RESOURCES_DIR = os.path.join(SCRIPT_DIR, "resources")
-MAX_IMAGE_SIZE = 3840
+MAX_IMAGE_SIZE = 2500
 MINIMUM_CONFIDENCE_THRESHOLD = 0.5
 IMAGE_DOWNLOAD_TIMEOUT = 5
 URL_REGEX = re.compile(
