@@ -138,7 +138,7 @@ if __name__ == "__main__":
     if not isinstance(numeric_level, int):
         raise ValueError('Invalid log level: %s' % numeric_level)
     logging.basicConfig(format='%(levelname)s %(asctime)s:  %(message)s', datefmt='%m/%d/%Y %I:%M:%S %p', level=numeric_level)
-    logging.basicConfig(filename='example.log', level=numeric_level)
+    logging.basicConfig(filename='API_logs.log', level=numeric_level)
 
     uvicorn.run(app,
                 port=args.port,
