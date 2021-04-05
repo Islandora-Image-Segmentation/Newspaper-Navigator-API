@@ -16,6 +16,7 @@ from fastapi import Request
 from fastapi import Security
 from fastapi.security import APIKeyHeader
 from starlette.status import HTTP_401_UNAUTHORIZED
+import logging
 
 app = FastAPI()
 
@@ -133,8 +134,15 @@ if __name__ == "__main__":
     if args.api_key:
         _api_key = str(args.api_key)
 
+    numeric_level = getattr(logging, args.log_level.upper(), None)
+    if not isinstance(numeric_level, int):
+        raise ValueError('Invalid log level: %s' % numeric_level)
+    logging.basicConfig(format='%(levelname)s %(asctime)s:  %(message)s', datefmt='%m/%d/%Y %I:%M:%S %p', level=numeric_level)
+    logging.basicConfig(filename='example.log', level=numeric_level)
+
     uvicorn.run(app,
                 port=args.port,
                 host=args.host,
                 log_level=args.log_level,
-                timeout_keep_alive=args.timeout)
+                timeout_keep_alive=args.timeout,
+                log_config=None)
