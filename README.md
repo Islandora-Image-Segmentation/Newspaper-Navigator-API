@@ -25,7 +25,7 @@ Alternatively, you can build a Docker container containing all the dependencies 
  If running in Docker, you can launch it by running  `docker-compose up --build`.
  
  The CLI accepts the following arguments:
- 1.`--port` / `-p`: The port to launch on (default `8000`)
+ 1.`--port` / `-p`: The port to launch on (default `8008`)
  2.`--host`: What host to listen on (default `0.0.0.0`)
  3.`--log-level`/`-l`: Minimum log level to use (default `info`)
  4.`--timeout`/`-t`: Timeout keep alive in seconds (default `30`)
