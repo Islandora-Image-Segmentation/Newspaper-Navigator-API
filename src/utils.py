@@ -21,6 +21,7 @@ def crop(image: Image.Image, box) -> Image.Image:
 
 def standardize_image(image: Image.Image) -> Image.Image:
     """ Standardize image to RGB and max width/height of 3000 (while maintaining aspect ratio) """
+    logging.debug("Standardizing image ...")
     standardized_image = image.convert("RGB")
     if max(image.size) > config.MAX_IMAGE_SIZE:
         standardized_image.thumbnail((config.MAX_IMAGE_SIZE, config.MAX_IMAGE_SIZE), Image.ANTIALIAS)
