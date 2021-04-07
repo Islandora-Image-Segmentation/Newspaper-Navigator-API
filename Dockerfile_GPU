@@ -15,3 +15,5 @@ RUN pip install -r /requirements.txt
 
 COPY ./src /src
 RUN echo "USE_CPU=False" >> /src/config.py
+
+ENTRYPOINT ["python", "/src/main.py"]

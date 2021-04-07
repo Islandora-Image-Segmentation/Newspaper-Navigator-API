@@ -6,7 +6,6 @@ services:
       context: .
       dockerfile: "Dockerfile_GPU"
     ports:
-      - '8000:8000'
+      - '8008:8008'
     restart: on-failure
-    command: pytest /src
     runtime: nvidia
