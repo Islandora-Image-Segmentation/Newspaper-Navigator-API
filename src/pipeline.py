@@ -1,13 +1,11 @@
-from typing import List
-
-from PIL import Image
-
 import config
 import embedding
 import inference
 import ocr
 import schemas
 import utils
+from PIL import Image
+from typing import List
 
 
 def segment_image(image: Image.Image) -> List[schemas.ExtractedSegment]:

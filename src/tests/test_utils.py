@@ -5,6 +5,7 @@ from utils import crop
 
 from . import TEST_ASSETS_DIR
 
+
 @pytest.mark.parametrize("test_image", ["test_image_one.png", "test_image_two.png"])
 def test_crop(test_image):
     # Load Image
