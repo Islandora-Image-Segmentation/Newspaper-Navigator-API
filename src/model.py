@@ -28,6 +28,9 @@ def get_embedding_model():
     
 
 def load_inference_model_from_disk():
+    """ This function fetches, configured, and returns the inference model from disk.
+        The model weights are expected to be in src/resources. 
+    """
     if os.path.exists(INFERENCE_MODEL_WEIGHTS):
         model_config = build_detectron_config()
         model = detectron2.modeling.build_model(model_config)
@@ -40,6 +43,7 @@ def load_inference_model_from_disk():
 
 
 def build_detectron_config():
+    """ This utility function builds and returns a Detectron config object. """
     model_config = get_cfg()
     model_config.merge_from_file(model_zoo.get_config_file("COCO-Detection/faster_rcnn_R_50_FPN_3x.yaml"))
     model_config.MODEL.ROI_HEADS.NUM_CLASSES = 7

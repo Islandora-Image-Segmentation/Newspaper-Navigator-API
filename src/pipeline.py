@@ -12,6 +12,10 @@ from PIL import Image
 
 
 def segment_image(image: Image.Image) -> List[schemas.ExtractedSegment]:
+    """ This function is the core of the API and ties the other modules together.
+        All images sent to endpoints go through this pipeline for segmentation.
+        Images are standardized, fed to the model, low confidence segments are removed, then each segment is cropped and OCR'd.
+    """ 
     logging.info("Starting image segmentation...")
     standardized_image = utils.standardize_image(image)
     model_output = inference.predict(standardized_image)
@@ -33,6 +37,7 @@ def segment_image(image: Image.Image) -> List[schemas.ExtractedSegment]:
     logging.debug("Generating segment embeddings ...")
     segment_embeddings = [embedding.generate_embeddings(image).tolist() for image in segment_images]
 
+    # Build the ExtractedSegment objects to return
     segments = []
     for i in range(len(model_output.bounding_boxes)):
         segment = schemas.ExtractedSegment(ocr_text=segment_ocr[i],
