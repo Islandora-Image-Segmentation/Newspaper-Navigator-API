@@ -12,6 +12,7 @@ _embedding_model = None
 
 
 def get_inference_model():
+    """ Lazily load the inference model from disk, but cache a reference to it once it has been loaded."""
     global _inference_model
     if _inference_model is None:
         _inference_model = load_inference_model_from_disk()
@@ -19,11 +20,12 @@ def get_inference_model():
 
 
 def get_embedding_model():
+    """ Lazily load the embedding model from disk, but cache a reference to it once it has been loaded."""
     global _embedding_model
     if _embedding_model is None:
-        _embedding_model = Img2Vec(cuda=False, model='resnet-18')  # Smaller model runs faster on CPU
+        _embedding_model = Img2Vec(cuda=False, model='resnet-18') 
     return _embedding_model
-
+    
 
 def load_inference_model_from_disk():
     if os.path.exists(INFERENCE_MODEL_WEIGHTS):
