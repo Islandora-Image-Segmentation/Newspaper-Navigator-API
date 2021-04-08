@@ -1,27 +1,36 @@
+import logging 
+from typing import List
+
 import config
 import embedding
 import inference
 import ocr
 import schemas
 import utils
+
 from PIL import Image
-from typing import List
 
 
 def segment_image(image: Image.Image) -> List[schemas.ExtractedSegment]:
+    logging.info("Starting image segmentation...")
     standardized_image = utils.standardize_image(image)
     model_output = inference.predict(standardized_image)
 
-    # Iterate backwards here because we're removing elements as we iterate
-    for i in range(len(model_output.confidences) - 1, -1, -1):  
+    logging.debug("Removing model output below confidence threshold ...")
+    for i in range(len(model_output.confidences) - 1, -1,
+                   -1):  # Iterate backwards here because we're removing elements as we iterate
         if model_output.confidences[i] < config.MINIMUM_CONFIDENCE_THRESHOLD:
             del model_output.confidences[i]
             del model_output.classes[i]
             del model_output.bounding_boxes[i]
 
+    logging.debug("Cropping out segments...")
     segment_images = [utils.crop(image, box).convert("RGB") for box in model_output.bounding_boxes]
+    logging.debug("Running OCR on sgements ...")
     segment_ocr = [ocr.retrieve_ocr(image) for image in segment_images]
+    logging.debug("Running HOCR on segments ...")
     segment_hocr = [ocr.retrieve_hocr(image) for image in segment_images]
+    logging.debug("Generating segment embeddings ...")
     segment_embeddings = [embedding.generate_embeddings(image).tolist() for image in segment_images]
 
     segments = []
@@ -34,4 +43,5 @@ def segment_image(image: Image.Image) -> List[schemas.ExtractedSegment]:
                                            confidence=model_output.confidences[i])
         segments.append(segment)
 
+    logging.info(f"Segmentation complete. Returning {len(segments)} segments.")
     return segments

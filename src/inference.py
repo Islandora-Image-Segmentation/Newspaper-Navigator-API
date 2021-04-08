@@ -1,3 +1,4 @@
+import logging
 import numpy as np
 import torch
 import utils
@@ -26,16 +27,19 @@ def predict(image: Image.Image):
     """ Take an image and run it through the inference model. This returns a ModelOutput object with all of the 
     information that the model returns. Furthermore, bounding box coordinates are normalized.
     """
+    logging.debug("Sending image to model for inference ...")
     width, height = image.size
     model = get_inference_model()
     model.eval()
     with torch.no_grad():
         model_input = image_to_model_input(image)
         model_output = model([model_input])[0]
+        logging.debug(f"Model returned {len(model_output)} fields.")
         bounding_boxes = model_output["instances"].get_fields()["pred_boxes"].to("cpu").tensor.tolist()
         confidences = model_output["instances"].get_fields()["scores"].to("cpu").tolist()
         classes = model_output["instances"].get_fields()["pred_classes"].to("cpu").tolist()
         classes = [CATEGORIES[num] for num in classes]
+
         normalized_bounding_boxes = []
         for box in bounding_boxes:
             normalized_box = (
@@ -44,6 +48,7 @@ def predict(image: Image.Image):
                                                          upper_left_y=normalized_box[1],
                                                          lower_right_x=normalized_box[2],
                                                          lower_right_y=normalized_box[3]))
+                                                         
         return ModelOutput(bounding_boxes=normalized_bounding_boxes,
                            confidences=confidences,
                            classes=classes)
