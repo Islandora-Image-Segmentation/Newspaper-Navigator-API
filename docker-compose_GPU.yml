@@ -9,3 +9,5 @@ services:
       - '8008:8008'
     restart: on-failure
     runtime: nvidia
+    environment:
+      - NVIDIA_VISIBLE_DEVICES=all
