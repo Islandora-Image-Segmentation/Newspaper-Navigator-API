@@ -46,7 +46,7 @@ def load_inference_model_from_disk():
 
 
 def build_detectron_config(use_cpu=config.USE_CPU):
-	""" This utility function builds and returns a Detectron config object. """
+    """ This utility function builds and returns a Detectron config object. """
     model_config = get_cfg()
     model_config.merge_from_file(model_zoo.get_config_file("COCO-Detection/faster_rcnn_R_50_FPN_3x.yaml"))
     model_config.MODEL.ROI_HEADS.NUM_CLASSES = 7
