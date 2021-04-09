@@ -25,24 +25,6 @@ class BoundingBox(BaseModel):
             return self.lower_right_y
 
 
-class Categories(Enum):
-    illustration = 'illustration'
-    photograph = "photograph"
-    comic_cartoon = "comics/cartoon"
-    editorial_cartoon = "editorial_cartoon"
-    map = "map"
-    headline = "headline"
-    ad = "ad"
-
-
-class Article(BaseModel):
-    class Config:
-        arbitrary_types_allowed = True
-
-    image: Image.Image
-    metadata: dict
-
-
 class ExtractedSegment(BaseModel):
     ocr_text: str
     hocr: str

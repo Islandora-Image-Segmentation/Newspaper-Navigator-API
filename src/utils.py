@@ -2,8 +2,11 @@ import base64
 import config
 import io
 import re
+import logging 
+
 import requests
 from PIL import Image
+
 
 FILE_DOWNLOAD_HEADERS = {
     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) Apple'
@@ -18,6 +21,7 @@ def crop(image: Image.Image, box) -> Image.Image:
 
 def standardize_image(image: Image.Image) -> Image.Image:
     """ Standardize image to RGB and max width/height of 3000 (while maintaining aspect ratio) """
+    logging.debug("Standardizing image ...")
     standardized_image = image.convert("RGB")
     if max(image.size) > config.MAX_IMAGE_SIZE:
         standardized_image.thumbnail((config.MAX_IMAGE_SIZE, config.MAX_IMAGE_SIZE), Image.ANTIALIAS)
@@ -36,13 +40,17 @@ def base64_to_image(base64_string: str) -> Image.Image:
 
 
 def download_image(image_url: str) -> Image.Image:
+    logging.debug(f"Verifying that URL is valid: {image_url}")
     assert re.match(config.URL_REGEX, image_url) is not None  # confirm that it's a valid URL
+    logging.debug(f"Trying to download image...")
     response = requests.get(image_url,
                             verify=False,
                             timeout=config.IMAGE_DOWNLOAD_TIMEOUT,
                             headers=FILE_DOWNLOAD_HEADERS)
     if response.status_code == 200:
+        logging.debug(f"Successfully downloaded file at URL. Converting to image...")
         image_bytes = io.BytesIO(response.content)
         return Image.open(image_bytes)
     else:
-        raise Exception(f"Received status code {response.status_code} when downloading file {image_url}.")
+        logging.error(f"Received status code {response.status_code} when downloading image from {image_url}")
+        raise Exception(f"Received status code {response.status_code} when downloading image from {image_url}.")

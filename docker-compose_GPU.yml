@@ -2,7 +2,7 @@ version: '3.7'
 
 services:
   segmentation_api:
-    build: 
+    build:
       context: .
       dockerfile: "Dockerfile_GPU"
     ports:
