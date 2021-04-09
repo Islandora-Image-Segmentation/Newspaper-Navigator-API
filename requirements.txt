@@ -8,6 +8,5 @@ fastapi==0.63.0
 numpy
 pytest~=6.2.2
 python-multipart==0.0.05
-av
 cloudpickle
 future
