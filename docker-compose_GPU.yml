@@ -1,0 +1,13 @@
+version: '3.7'
+
+services:
+  segmentation_api:
+    build:
+      context: .
+      dockerfile: "Dockerfile_GPU"
+    ports:
+      - '8008:8008'
+    restart: on-failure
+    runtime: nvidia
+    environment:
+      - NVIDIA_VISIBLE_DEVICES=all

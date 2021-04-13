@@ -6,7 +6,7 @@
 import os
 import re
 
-
+USE_CPU = True
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 RESOURCES_DIR = os.path.join(SCRIPT_DIR, "resources")
 MAX_IMAGE_SIZE = 2500 #Images get rescaled to this resolution when running through the pipeline
