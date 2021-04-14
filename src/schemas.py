@@ -1,9 +1,8 @@
+from PIL import Image
 from enum import Enum
 from pydantic import BaseModel
 from typing import List
 from typing import Optional
-
-from PIL import Image
 
 
 class BoundingBox(BaseModel):
@@ -24,24 +23,6 @@ class BoundingBox(BaseModel):
             return self.lower_right_x
         if i == 3:
             return self.lower_right_y
-
-
-class Categories(Enum):
-    illustration = 'illustration'
-    photograph = "photograph"
-    comic_cartoon = "comics/cartoon"
-    editorial_cartoon = "editorial_cartoon"
-    map = "map"
-    headline = "headline"
-    ad = "ad"
-
-
-class Article(BaseModel):
-    class Config:
-        arbitrary_types_allowed = True
-
-    image: Image.Image
-    metadata: dict
 
 
 class ExtractedSegment(BaseModel):
