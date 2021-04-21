@@ -106,7 +106,7 @@ async def segment_base64(request: schemas.Base64SegmentationRequest) -> schemas.
 
 def get_canned_response():
     """ This utility method returns a pre-calculated SegmentationResponse. 
-        This pre-calculated resposne is used in the test endpoints. 
+        This pre-calculated response is used in the test endpoints. 
     """
     logging.info("Returning canned response...")
     import pickle
