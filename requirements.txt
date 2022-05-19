@@ -1,6 +1,6 @@
 requests==2.25.1
 Pillow==8.1.0
-img2vec-pytorch==0.2.5
+img2vec-pytorch~=1.0.1
 pydantic~=1.7.3
 pytesseract==0.3.7
 uvicorn==0.13.3
