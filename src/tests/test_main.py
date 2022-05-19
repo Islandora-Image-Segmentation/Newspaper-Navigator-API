@@ -55,7 +55,7 @@ def test_url_shapes():
 
 def test_url_newspaper():
     """ End-to-end test for the URL endpoint. Attempts to give a URL of an actual newspaper with segments. """
-    url = "https://www.theguardian.pe.ca/media/photologue/photos/cache/TG-web-14062018-Guardian_past-sb_large.jpg"
+    url = "https://web.archive.org/web/20181031032357/https://www.theguardian.pe.ca/media/photologue/photos/cache/TG-web-14062018-Guardian_past-sb_large.jpg"
     response = client.post("/api/segment_url", json={"image_url": url})
     assert response.json()["status_code"] == 0
     assert response.json()["segment_count"] > 0
